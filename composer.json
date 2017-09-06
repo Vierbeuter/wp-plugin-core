@@ -1,0 +1,22 @@
+{
+    "name": "vierbeuter/wp-plugin-core",
+    "type": "library",
+    "description": "This library provides core functionality for WordPress plugin development.",
+    "keywords": ["WordPress", "wp", "plugin", "core"],
+    "require": {
+        "php": ">=7.1.0",
+        "pimple/pimple": "^3.2"
+    },
+    "authors": [
+        {
+            "name": "Vierbeuter",
+            "email": "info@vierbeuter.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Vierbeuter": "src/"
+        }
+    }
+}
