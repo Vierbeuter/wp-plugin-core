@@ -1,5 +1,7 @@
 # WP Plugin Core
 
+*// WORK IN PROGRESS, I RECOMMEND YOU TO WAIT UNTIL A RELEASE IS PUBLISHED*
+
 ## What's this?
 
 The **WP Plugin Core** library provides base classes for developing WordPress plugins. It enables you to easily build your stuff in a object-oriented way.
