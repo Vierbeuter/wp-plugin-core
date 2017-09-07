@@ -12,7 +12,7 @@ Since [Bedrock](https://roots.io/bedrock/) supports `composer` it's a perfect ma
 
 ## May I use it?
 
-Of course, you may. This library is licensed under the terms of the **MIT license**. See also the project's [license file](./LICENSE.md).
+Of course, you may. This library is licensed under the terms of the **MIT license**. See also the project's [license file](./LICENSE).
 
 ## Let's use it!
 
