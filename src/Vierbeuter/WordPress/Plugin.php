@@ -3,6 +3,7 @@
 namespace Vierbeuter\WordPress;
 
 use Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer;
+use Vierbeuter\WordPress\Traits\HasFeatureSupport;
 use Vierbeuter\WordPress\Traits\HasTranslatorService;
 
 /**
@@ -27,6 +28,10 @@ abstract class Plugin
      * include methods for translating texts
      */
     use HasTranslatorService;
+    /**
+     * include methods for working with feaetures
+     */
+    use HasFeatureSupport;
 
     /**
      * Plugin constructor.
@@ -65,11 +70,14 @@ abstract class Plugin
      * <code>
      * protected function initPlugin(): void
      * {
+     *   //  add an awesome feature
+     *   $this->addFeature(new AwesomeFeature());
      *   //  register an awesome service to DI-container
      *   $this->addComponent('service-handle', new AwesomeService());
      * }
      * </code>
      *
+     * @see \Vierbeuter\WordPress\Plugin::addFeature()
      * @see \Vierbeuter\WordPress\Plugin::addComponent()
      */
     abstract protected function initPlugin(): void;
