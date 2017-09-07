@@ -11,7 +11,8 @@
     "authors": [
         {
             "name": "Vierbeuter",
-            "email": "info@vierbeuter.de"
+            "email": "info@vierbeuter.de",
+            "homepage": "http://www.vierbeuter.de"
         }
     ],
     "minimum-stability": "dev",
