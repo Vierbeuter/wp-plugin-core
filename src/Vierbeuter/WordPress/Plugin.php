@@ -65,7 +65,7 @@ abstract class Plugin
     /**
      * Initializes the plugin, e.g. adds features or services using the addFeature(…) and addComponent(…) methods.
      *
-     * Example implemantation:
+     * Example implementation:
      *
      * <code>
      * protected function initPlugin(): void
