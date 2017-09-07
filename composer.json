@@ -7,6 +7,7 @@
         "php": ">=7.1.0",
         "pimple/pimple": "^3.2"
     },
+    "license": "MIT",
     "authors": [
         {
             "name": "Vierbeuter",
