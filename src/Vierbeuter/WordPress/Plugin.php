@@ -2,8 +2,8 @@
 
 namespace Vierbeuter\WordPress;
 
-use Pimple\Container;
-use Vierbeuter\WordPress\Service\Translator;
+use Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer;
+use Vierbeuter\WordPress\Traits\HasTranslatorService;
 
 /**
  * The Plugin class is supposed to be extended by any class representing a concrete plugin. It provides core
@@ -20,23 +20,24 @@ abstract class Plugin
     protected static $plugin;
 
     /**
-     * @var \Pimple\Container
-     *
-     * container to be used for dependeny injection
-     *
-     * @see https://pimple.symfony.com/
+     * include methods for DI-container support
      */
-    protected $container;
+    use HasDependencyInjectionContainer;
+    /**
+     * include methods for translating texts
+     */
+    use HasTranslatorService;
 
     /**
      * Plugin constructor.
      */
     private function __construct()
     {
-        $this->container = new Container();
+        //  initialize service container
+        $this->initDiContainer();
 
         //  initialize services
-        $this->addComponent('translator', new Translator());
+        $this->addTranslator();
 
         //  initialize features etc.
         $this->initPlugin();
@@ -54,48 +55,6 @@ abstract class Plugin
         }
 
         return static::$plugin;
-    }
-
-    /**
-     * Adds the given component to the DI-container.
-     *
-     * @param string $name
-     * @param mixed $instance
-     */
-    protected function addComponent(string $name, mixed $instance): void
-    {
-        /**
-         * @param \Pimple\Container $c
-         *
-         * @return mixed
-         */
-        $this->container[$name] = function ($c) use ($instance) {
-            return $instance;
-        };
-    }
-
-    /**
-     * Returns the component for given name.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected function getComponent(string $name): mixed
-    {
-        return $this->container[$name];
-    }
-
-    /**
-     * Translates the given text.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    public function translate(string $text): string
-    {
-        return $this->getComponent('translator')->translate($text);
     }
 
     /**
