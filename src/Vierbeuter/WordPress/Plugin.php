@@ -18,7 +18,7 @@ abstract class Plugin
      *
      * the WordPress plugin itself
      */
-    protected static $plugin;
+    private static $plugin;
 
     /**
      * include methods for DI-container support
