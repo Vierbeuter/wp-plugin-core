@@ -30,9 +30,9 @@ trait HasTranslatorService
     /**
      * Returns the translator service.
      *
-     * @return \Vierbeuter\WordPress\Service\Translator
+     * @return null|\Vierbeuter\WordPress\Service\Translator
      */
-    private function getTranslator(): Translator
+    private function getTranslator(): ?Translator
     {
         return $this->getComponent('translator');
     }

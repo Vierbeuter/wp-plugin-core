@@ -39,9 +39,9 @@ trait HasFeatureSupport
      *
      * @param string $classname
      *
-     * @return \Vierbeuter\WordPress\Feature\Feature
+     * @return null|\Vierbeuter\WordPress\Feature\Feature
      */
-    protected function getFeature(string $classname): Feature
+    protected function getFeature(string $classname): ?Feature
     {
         return $this->getComponent($classname);
     }
