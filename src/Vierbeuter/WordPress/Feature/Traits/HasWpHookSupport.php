@@ -49,12 +49,12 @@ trait HasWpHookSupport
             $methodName = str_replace('-', '_', $methodName);
 
             //  check first if hook-method exists before defining the callable
-            if (!method_exists(get_called_class(), $methodName)) {
+            if (!method_exists($this, $methodName)) {
                 throw new \Exception('Hook not properly defined in ' . get_called_class() . '::getActionHooks(): missing hook implementation for "' . $hookName . '". Please add method ' . $methodName . '() or delete hook "' . $hookName . '".');
             }
 
             //  define callable for the action hook --> associate each hook with method of same name (within this class)
-            $callable = [get_called_class(), $methodName];
+            $callable = [$this, $methodName];
 
             //  register the callable for current action-hook
             add_action($hookName, $callable, $priority, $arguments);
@@ -89,12 +89,12 @@ trait HasWpHookSupport
             $methodName = str_replace('-', '_', $methodName);
 
             //  check first if hook-method exists before defining the callable
-            if (!method_exists(get_called_class(), $methodName)) {
+            if (!method_exists($this, $methodName)) {
                 throw new \Exception('Hook not properly defined in ' . get_called_class() . '::getFilterHooks(): missing hook implementation for "' . $hookName . '". Please add method ' . $methodName . '() or delete hook "' . $hookName . '".');
             }
 
             //  define callable for the action hook --> associate each hook with method of same name (within this class)
-            $callable = [get_called_class(), $methodName];
+            $callable = [$this, $methodName];
 
             //  register the callable for current filter-hook
             add_filter($hookName, $callable, $priority, $arguments);
