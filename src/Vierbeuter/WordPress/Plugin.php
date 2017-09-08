@@ -59,14 +59,16 @@ abstract class Plugin
     }
 
     /**
-     * Activates the plugin. Expects an absolute file path to the WordPress plugin's index.php file.
+     * Activates the plugin. Expects an absolute file path of the WordPress plugin's index.php file to be passed.
      *
-     * Example usge in "your-awesome-plugin/index.php":
+     * Example usage within "your-awesome-plugin/index.php" (after registering an autoloader):
      * <code>
-     * YourAwesomePlugin::activate(__FILE__);
+     * \Any\Namespace\YourAwesomePlugin::activate(__FILE__);
      * </code>
      *
-     * @param string $pluginFile
+     * @param string $pluginFile absolute path of the WordPress plugin's index.php file.
+     *
+     * @see \Vierbeuter\WordPress\Autoloader::register()
      */
     public static function activate(string $pluginFile)
     {
