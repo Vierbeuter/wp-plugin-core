@@ -29,7 +29,7 @@ abstract class Plugin
      */
     use HasTranslatorService;
     /**
-     * include methods for working with feaetures
+     * include methods for working with features
      */
     use HasFeatureSupport;
 
