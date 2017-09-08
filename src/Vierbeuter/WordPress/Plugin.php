@@ -19,7 +19,7 @@ abstract class Plugin
      *
      * the WordPress plugin itself
      */
-    private static $plugin;
+    protected static $plugin;
 
     /**
      * include properties and methods for retrieving general plugin data
