@@ -4,6 +4,7 @@ namespace Vierbeuter\WordPress;
 
 use Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer;
 use Vierbeuter\WordPress\Traits\HasFeatureSupport;
+use Vierbeuter\WordPress\Traits\HasPluginData;
 use Vierbeuter\WordPress\Traits\HasTranslatorService;
 
 /**
@@ -21,6 +22,10 @@ abstract class Plugin
     private static $plugin;
 
     /**
+     * include properties and methods for retrieving general plugin data
+     */
+    use HasPluginData;
+    /**
      * include methods for DI-container support
      */
     use HasDependencyInjectionContainer;
@@ -35,9 +40,14 @@ abstract class Plugin
 
     /**
      * Plugin constructor.
+     *
+     * @param string $pluginFile
      */
-    private function __construct()
+    private function __construct(string $pluginFile)
     {
+        //  set plugin file and some other data
+        $this->setPluginFile($pluginFile);
+
         //  initialize service container
         $this->initDiContainer();
 
@@ -49,14 +59,21 @@ abstract class Plugin
     }
 
     /**
-     * Activates the plugin.
+     * Activates the plugin. Expects an absolute file path to the WordPress plugin's index.php file.
+     *
+     * Example usge in "your-awesome-plugin/index.php":
+     * <code>
+     * YourAwesomePlugin::activate(__FILE__);
+     * </code>
+     *
+     * @param string $pluginFile
      */
-    public static function activate()
+    public static function activate(string $pluginFile)
     {
         //  only activate a plugin once
         if (empty(static::$plugin)) {
             //  construct new instance to initialize and activate the plugin
-            static::$plugin = new static();
+            static::$plugin = new static($pluginFile);
         }
     }
 
