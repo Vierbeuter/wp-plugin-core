@@ -3,10 +3,11 @@
 namespace Vierbeuter\WordPress\Traits;
 
 use Pimple\Container;
+use Vierbeuter\WordPress\Component;
 
 /**
- * The HasDependencyInjectionContainer trait provides methods for accessing a DI-container to store services in, for
- * example.
+ * The HasDependencyInjectionContainer trait provides methods for accessing a DI-container to store any components in
+ * such as services, for example.
  *
  * @package Vierbeuter\WordPress\Traits
  */
@@ -34,17 +35,17 @@ trait HasDependencyInjectionContainer
      * Adds the given component to the DI-container.
      *
      * @param string $name
-     * @param mixed $instance
+     * @param \Vierbeuter\WordPress\Component $component
      */
-    protected function addComponent(string $name, mixed $instance): void
+    protected function addComponent(string $name, Component $component): void
     {
         /**
          * @param \Pimple\Container $c
          *
-         * @return mixed
+         * @return \Vierbeuter\WordPress\Component
          */
-        $this->container[$name] = function (Container $c) use ($instance) {
-            return $instance;
+        $this->container[$name] = function (Container $c) use ($component) {
+            return $component;
         };
     }
 
@@ -53,10 +54,10 @@ trait HasDependencyInjectionContainer
      *
      * @param string $name
      *
-     * @return mixed
+     * @return null|\Vierbeuter\WordPress\Component
      */
-    protected function getComponent(string $name): mixed
+    protected function getComponent(string $name): ?Component
     {
-        return $this->container[$name];
+        return isset($this->container[$name]) ? $this->container[$name] : null;
     }
 }

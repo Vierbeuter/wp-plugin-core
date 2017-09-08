@@ -2,6 +2,7 @@
 
 namespace Vierbeuter\WordPress\Feature;
 
+use Vierbeuter\WordPress\Component;
 use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
 
 /**
@@ -9,7 +10,7 @@ use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
  *
  * @package Vierbeuter\WordPress\Feature
  */
-abstract class Feature
+abstract class Feature extends Component
 {
 
     /**
