@@ -49,14 +49,30 @@ abstract class Plugin
     }
 
     /**
-     * Returns the plugin.
+     * Activates the plugin.
+     */
+    public static function activate()
+    {
+        //  only activate a plugin once
+        if (empty(static::$plugin)) {
+            //  construct new instance to initialize and activate the plugin
+            static::$plugin = new static();
+        }
+    }
+
+    /**
+     * Returns the plugin unless it's not activated.
      *
      * @return \Vierbeuter\WordPress\Plugin
+     *
+     * @throws \Exception if plugin is not activated
+     *
+     * @see \Vierbeuter\WordPress\Plugin::activate()
      */
     public static function getInstance(): Plugin
     {
         if (empty(static::$plugin)) {
-            static::$plugin = new static();
+            throw new \Exception('Plugin not activated, invoke activate(…) method first before using it.');
         }
 
         return static::$plugin;
