@@ -4,7 +4,7 @@
 
 ## What's this?
 
-The **WP Plugin Core** library provides base classes for developing WordPress plugins. It enables you to easily build your stuff in a object-oriented way.
+The **WP Plugin Core** library provides base classes for developing WordPress plugins. It enables you to easily build your stuff in an object-oriented way.
 
 ## Can I use it?
 
