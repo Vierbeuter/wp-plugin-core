@@ -27,6 +27,10 @@ trait HasFeatureSupport
     {
         //  add feature only once
         if (empty($this->getFeature(get_class($feature)))) {
+            //  add translator to feature
+            $feature->setTranslator($this->getTranslator());
+
+            //  add to DI-container
             $this->addComponent(get_class($feature), $feature);
 
             //  activate feature
