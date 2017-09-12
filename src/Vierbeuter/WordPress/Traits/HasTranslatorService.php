@@ -23,7 +23,7 @@ trait HasTranslatorService
     {
         //  add service only once
         if (empty($this->getTranslator())) {
-            $this->addComponent('translator', new Translator());
+            $this->addComponent('translator', new Translator($this->getPluginName()));
         }
     }
 
