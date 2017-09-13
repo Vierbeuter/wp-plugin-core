@@ -15,7 +15,6 @@
             "homepage": "http://www.vierbeuter.de"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "Vierbeuter": "src/"
