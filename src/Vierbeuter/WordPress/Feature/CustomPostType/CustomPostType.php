@@ -310,7 +310,7 @@ abstract class CustomPostType
     {
         return [
             'cb' => '<input type="checkbox" />',
-            'title' => $this->$this->translate('title'),
+            'title' => $this->translate('title'),
         ];
     }
 
