@@ -418,7 +418,7 @@ abstract class AddCustomPostTypes extends Feature
                 //  check if no title field configured for this post-type
                 //  --> 'cause only if title field is missing we want to update it (and therefore the slug) automatically
                 if (empty($postTypeOptions['supports']) || !in_array('title', $postTypeOptions['supports'])) {
-                    //	ID of the first custom-field that can be found
+                    //  ID of the first custom-field that can be found
                     //  --> the title is gonna be filled using that one custom-field
                     $firstFieldId = null;
 
@@ -429,17 +429,17 @@ abstract class AddCustomPostTypes extends Feature
                         $fields = $fieldGroup->getFields();
                         $firstField = reset($fields);
 
-                        //	if at least this one field is defined
+                        //  if at least this one field is defined
                         if (!empty($firstField)) {
-                            //	use its ID and stop the loop
+                            //  use its ID and stop the loop
                             $firstFieldId = $fieldGroup->getFieldId($firstField);
                             break;
                         }
                     }
 
-					//	get post ID, use random hash as fallback
+                    //  get post ID, use random hash as fallback
                     $fallback = empty($postAttr['ID']) ? substr(md5(microtime(true)), 0, 10) : $postAttr['ID'];
-                    //	get the value of the first field, fallback is the ID (or the hash)
+                    //  get the value of the first field, fallback is the ID (or the hash)
                     $title = empty($firstFieldId) || empty($postAttr[$firstFieldId]) ? $fallback : $postAttr[$firstFieldId];
                     //  get slug using the title
                     $slug = sanitize_title($title, $fallback);
