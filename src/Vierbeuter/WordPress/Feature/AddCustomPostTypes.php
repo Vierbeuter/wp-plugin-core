@@ -364,20 +364,19 @@ abstract class AddCustomPostTypes extends Feature
     }
 
     /**
-     * Hooks into the same-named action hook to
-     * Greift in den gleichnamigen Hook ein, um eigene CSS-Styles für das Admin-Panel zu ergänzen.
+     * Hooks into the same-named action hook to add some CSS styles to the admin panel.
      */
     public function admin_head(): void
     {
         ?>
 		<style type="text/css">
-			/* Hinweise und Beschreibungen zu Custom-Fields */
+			/* hints and descriptions for custom-fields */
 			.form-table td p.custom-field-note, .form-table td span.custom-field-note {
 				font-size: 90%;
 				color: #555;
 			}
 
-			/* Code-Schnipsel in Hinweisen und Beschreibungen zu Custom-Fields */
+			/* code-snippets in hints and descriptions of custom-fields */
 			.form-table td p.custom-field-note code {
 				font-size: 90%;
 			}
