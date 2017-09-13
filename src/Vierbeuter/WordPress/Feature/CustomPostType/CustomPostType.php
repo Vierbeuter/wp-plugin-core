@@ -229,7 +229,7 @@ abstract class CustomPostType
             'hierarchical' => false,
             'description' => $this->getDescription(),
             'supports' => false,
-            ['title', /*'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'any_custom_field',*/],
+            //['title', /*'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'any_custom_field',*/],
             'taxonomies' => [/*'category', 'post_tag', 'any_post_type'*/],
             'public' => true,
             'show_ui' => true,
@@ -536,5 +536,17 @@ abstract class CustomPostType
 
         //  return the taxonmies' names
         return empty($taxonomyNames) ? $default : implode('; ', $taxonomyNames);
+    }
+
+    /**
+     * Determines if a post's title and slug have to be updated on saving it.
+     *
+     * @return bool
+     *
+     * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::wp_insert_post_data()
+     */
+    public function updateTitleAndSlugOnSave(): bool
+    {
+        return true;
     }
 }

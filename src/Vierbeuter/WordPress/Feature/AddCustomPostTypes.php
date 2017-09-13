@@ -122,7 +122,12 @@ abstract class AddCustomPostTypes extends Feature
     protected function getFilterHooks(): array
     {
         $filter_hooks = [
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::pre_get_posts() */
             'pre_get_posts',
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::wp_insert_post_data() */
+            'wp_insert_post_data' => [
+                'args' => 2,
+            ],
         ];
 
         //  iterate all post-types to hook into post-type-specific filter hooks
@@ -264,7 +269,7 @@ abstract class AddCustomPostTypes extends Feature
     }
 
     /**
-     * Hooks into the same-named action hook to extend the fulltext-search for also searching custom-fields of a
+     * Hooks into the same-named filter hook to extend the fulltext-search for also searching custom-fields of a
      * post-type.
      *
      * @param \WP_Query $query
@@ -381,5 +386,71 @@ abstract class AddCustomPostTypes extends Feature
 				font-size: 90%;
 			}
 		</style><?php
+    }
+
+    /**
+     * Hooks into the same-named filter hook to automatically update a post's title and slug on save.
+     *
+     * To set the title and slug the value of the very first custom-field will be used.
+     *
+     * @param array $data the data of a custom post-type
+     * @param array $postAttr array of sanitized, but otherwise unmodified post data
+     *
+     * @return array
+     *
+     * @see CustomPostType::updateTitleAndSlugOnSave()
+     */
+    public function wp_insert_post_data(array $data, array $postAttr)
+    {
+        //  get slug of requested post-type
+        $requestedPostTypeSlug = $data['post_type'];
+
+        //  only on saving a post from within its edit-page (not on quick-edit from within list view since there are meta-fields mssing)
+        if (!empty($postAttr['action']) && $postAttr['action'] == 'editpost') {
+            //  determine the post-type
+            $postType = $this->getPostType($requestedPostTypeSlug);
+
+            //  if post-type found and if automatic update of title and slug allowed for this post-type
+            if (!empty($postType) && $postType->updateTitleAndSlugOnSave()) {
+                //  get post-type config
+                $postTypeOptions = $postType->getOptions();
+
+                //  check if no title field configured for this post-type
+                //  --> 'cause only if title field is missing we want to update it (and therefore the slug) automatically
+                if (empty($postTypeOptions['supports']) || !in_array('title', $postTypeOptions['supports'])) {
+                    //	ID of the first custom-field that can be found
+                    //  --> the title is gonna be filled using that one custom-field
+                    $firstFieldId = null;
+
+                    //  iterate all field-groups (in case of first group has no custom-fields)
+                    foreach ($postType->getFieldGroups() as $fieldGroup) {
+                        //  get first field (unless field list is empty)
+                        //  erstes Feld holen (sofern vorhanden)
+                        $fields = $fieldGroup->getFields();
+                        $firstField = reset($fields);
+
+                        //	if at least this one field is defined
+                        if (!empty($firstField)) {
+                            //	use its ID and stop the loop
+                            $firstFieldId = $fieldGroup->getFieldId($firstField);
+                            break;
+                        }
+                    }
+
+					//	get post ID, use random hash as fallback
+                    $fallback = empty($postAttr['ID']) ? substr(md5(microtime(true)), 0, 10) : $postAttr['ID'];
+                    //	get the value of the first field, fallback is the ID (or the hash)
+                    $title = empty($firstFieldId) || empty($postAttr[$firstFieldId]) ? $fallback : $postAttr[$firstFieldId];
+                    //  get slug using the title
+                    $slug = sanitize_title($title, $fallback);
+
+                    //  apply the post's new title and slug
+                    $data['post_title'] = $title;
+                    $data['post_name'] = $slug;
+                }
+            }
+        }
+
+        return $data;
     }
 }
