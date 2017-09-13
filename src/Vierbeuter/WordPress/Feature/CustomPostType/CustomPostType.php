@@ -229,7 +229,7 @@ abstract class CustomPostType
             'hierarchical' => false,
             'description' => $this->getDescription(),
             'supports' => false,
-            //['title', /*'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'any_custom_field',*/],
+            ['title', /*'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'any_custom_field',*/],
             'taxonomies' => [/*'category', 'post_tag', 'any_post_type'*/],
             'public' => true,
             'show_ui' => true,
