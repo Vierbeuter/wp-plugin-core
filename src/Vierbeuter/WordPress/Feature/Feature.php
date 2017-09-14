@@ -3,6 +3,7 @@
 namespace Vierbeuter\WordPress\Feature;
 
 use Vierbeuter\WordPress\Component;
+use Vierbeuter\WordPress\Feature\Traits\HasAdminNoticeSupport;
 use Vierbeuter\WordPress\Feature\Traits\HasTranslator;
 use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
 
@@ -22,6 +23,10 @@ abstract class Feature extends Component
      * include methods for translating strings
      */
     use HasTranslator;
+    /**
+     * include methods for adding system mesages in admin-panel
+     */
+    use HasAdminNoticeSupport;
 
     /**
      * Activates the feature to actually extend WP functionality.
