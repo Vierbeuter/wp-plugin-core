@@ -16,8 +16,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Vierbeuter": "src/"
+        "psr-4": {
+            "Vierbeuter\\WordPress\\": "src/Vierbeuter/WordPress/"
         }
     }
 }
