@@ -27,7 +27,7 @@ Alright, to setup this lib for your project just invoke the following command on
 ```bash
 # assuming you're in the project's root directory
 # (this is where your composer.json is located)
-composer require vierbeuter/wp-plugin-core @dev
+composer require vierbeuter/wp-plugin-core
 ```
 
 ### Implement your custom plugin
