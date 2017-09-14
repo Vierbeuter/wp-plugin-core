@@ -122,6 +122,7 @@ trait HasAdminNoticeSupport
     {
         /** @see http://codex.wordpress.org/Plugin_API/Action_Reference/admin_notices */
         $class = 'notice notice-' . $type . ($dismissible ? ' is-dismissible' : '');
+
         return '<div class="' . $class . '"><p>' . $message . '</p></div>';
     }
 }
