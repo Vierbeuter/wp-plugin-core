@@ -1,6 +1,8 @@
 # WP Plugin Core
 
-*// WORK IN PROGRESS, I RECOMMEND YOU TO WAIT UNTIL A RELEASE IS PUBLISHED*
+*// WORK IN PROGRESS, I RECOMMEND YOU TO WAIT UNTIL A FINAL RELEASE IS PUBLISHED*
+
+The library is pretty close to release 1.0 though. See the project's [roadmap](./ROADMAP.md) for what can be expected in the near and far future.
 
 ## What's this?
 
