@@ -24,9 +24,11 @@ trait HasTranslatorService
         //  add service only once
         if (empty($this->getTranslator())) {
             //  translator for the actual plugin
-            $this->addComponent('translator', new Translator($this->getPluginName()));
+            $translator = new Translator($this->getPluginName(), $this->getPluginDir() . 'languages/');
+            $this->addComponent('translator', $translator);
             //  translator for the base classes / plugin core
-            $this->addComponent('translator_core', new Translator('vb-wp-plugin-core'));
+            $coreTranslator = new Translator('vb-wp-plugin-core', realpath(__DIR__ . '/../../../../languages/'));
+            $this->addComponent('translator_core', $coreTranslator);
         }
     }
 

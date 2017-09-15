@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Vierbeuter WP-Core-Plugin\n"
-"POT-Creation-Date: 2017-09-15 17:18+0200\n"
+"POT-Creation-Date: 2017-09-15 17:54+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: AS <as@vierbeuter.de>\n"
 "Language-Team: Vierbeuter<info@vierbeuter.de>\n"
