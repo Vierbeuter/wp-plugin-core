@@ -42,14 +42,15 @@ abstract class Plugin
      * Plugin constructor.
      *
      * @param string $pluginFile
+     * @param array $parameters
      */
-    private function __construct(string $pluginFile)
+    private function __construct(string $pluginFile, array $parameters = [])
     {
         //  set plugin file and some other data
         $this->setPluginFile($pluginFile);
 
         //  initialize service container
-        $this->initDiContainer();
+        $this->initDiContainer($parameters);
 
         //  initialize services
         $this->addTranslator();
@@ -67,15 +68,17 @@ abstract class Plugin
      * </code>
      *
      * @param string $pluginFile absolute path of the WordPress plugin's index.php file.
+     * @param array $parameters parameters to be passed to the plugin, e.g. configurations to be accessed on
+     *     initializing the plugin features etc.
      *
      * @see \Vierbeuter\WordPress\Autoloader::register()
      */
-    public static function activate(string $pluginFile)
+    public static function activate(string $pluginFile, array $parameters = [])
     {
         //  only activate a plugin once
         if (empty(static::$plugin)) {
             //  construct new instance to initialize and activate the plugin
-            static::$plugin = new static($pluginFile);
+            static::$plugin = new static($pluginFile, $parameters);
         }
     }
 
@@ -107,13 +110,18 @@ abstract class Plugin
      * {
      *   //  add an awesome feature
      *   $this->addFeature(new AwesomeFeature());
+     *   //  add another awesome feature, but one a parameter is passed to
+     *   $this->addFeature(new AwesomeFeatureWithParam($this->getParameter('my-awesome-param')));
      *   //  register an awesome service to DI-container
      *   $this->addComponent('service-handle', new AwesomeService());
+     *   //  register an awesome service with parameter
+     *   $this->addComponent('service-handle', new AwesomeParameterizedService($this->getParameter('param')));
      * }
      * </code>
      *
      * @see \Vierbeuter\WordPress\Plugin::addFeature()
      * @see \Vierbeuter\WordPress\Plugin::addComponent()
+     * @see \Vierbeuter\WordPress\Plugin::getParameter()
      */
     abstract protected function initPlugin(): void;
 }
