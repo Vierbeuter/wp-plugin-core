@@ -29,6 +29,8 @@ trait HasFeatureSupport
         if (empty($this->getFeature(get_class($feature)))) {
             //  add translator to feature
             $feature->setTranslator($this->getTranslator());
+            //  add core translator to feature
+            $feature->setVbTranslator($this->getTranslator(true));
 
             //  add to DI-container
             $this->addComponent(get_class($feature), $feature);

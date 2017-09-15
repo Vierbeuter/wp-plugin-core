@@ -83,6 +83,11 @@ abstract class CustomPostType
     protected $translator;
 
     /**
+     * @var \Vierbeuter\WordPress\Service\Translator
+     */
+    protected $vbTranslator;
+
+    /**
      * @var array
      */
     protected $options;
@@ -172,13 +177,15 @@ abstract class CustomPostType
     }
 
     /**
-     * Sets the translator.
+     * Sets the translators.
      *
      * @param \Vierbeuter\WordPress\Service\Translator $translator
+     * @param \Vierbeuter\WordPress\Service\Translator $vbTranslator
      */
-    public function setTranslator(Translator $translator): void
+    public function setTranslators(Translator $translator, Translator $vbTranslator): void
     {
         $this->translator = $translator;
+        $this->vbTranslator = $vbTranslator;
     }
 
     /**
@@ -192,6 +199,21 @@ abstract class CustomPostType
     public function translate(string $text, string $context = null): string
     {
         return $this->translator->translate($text, $context);
+    }
+
+    /**
+     * Translates the given text using the vbTranslator, optionally using the context string passed as second parameter.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     * @param string|null $context
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text, string $context = null): string
+    {
+        return $this->vbTranslator->translate($text, $context);
     }
 
     /**
@@ -259,17 +281,17 @@ abstract class CustomPostType
         return [
             'name' => $labelPlural,
             'singular_name' => $labelSingular,
-            'add_new' => $this->translate('Add new'),
-            'add_new_item' => sprintf($this->translate('Add new %s', $this->getGender()), $labelSingular),
-            'edit_item' => sprintf($this->translate('Edit %s'), $labelSingular),
-            'new_item' => sprintf($this->translate('New %s', $this->getGender()), $labelSingular),
-            'view_item' => sprintf($this->translate('View %s'), $labelSingular),
-            'view_items' => sprintf($this->translate('View %s'), $labelPlural),
-            'search_items' => sprintf($this->translate('Search %s'), $labelPlural),
-            'not_found' => sprintf($this->translate('No %s found'), $labelPlural),
-            'not_found_in_trash' => sprintf($this->translate('No %s found in Trash.'), $labelPlural),
-            'parent_item_colon' => sprintf($this->translate('Parent %s:', $this->getGender()), $labelSingular),
-            'all_items' => sprintf($this->translate('All %s'), $labelPlural),
+            'add_new' => $this->vbTranslate('Add new'),
+            'add_new_item' => sprintf($this->vbTranslate('Add new %s', $this->getGender()), $labelSingular),
+            'edit_item' => sprintf($this->vbTranslate('Edit %s'), $labelSingular),
+            'new_item' => sprintf($this->vbTranslate('New %s', $this->getGender()), $labelSingular),
+            'view_item' => sprintf($this->vbTranslate('View %s'), $labelSingular),
+            'view_items' => sprintf($this->vbTranslate('View %s'), $labelPlural),
+            'search_items' => sprintf($this->vbTranslate('Search %s'), $labelPlural),
+            'not_found' => sprintf($this->vbTranslate('No %s found'), $labelPlural),
+            'not_found_in_trash' => sprintf($this->vbTranslate('No %s found in Trash.'), $labelPlural),
+            'parent_item_colon' => sprintf($this->vbTranslate('Parent %s:', $this->getGender()), $labelSingular),
+            'all_items' => sprintf($this->vbTranslate('All %s'), $labelPlural),
             'menu_name' => ucfirst($labelPlural),
         ];
     }
@@ -310,7 +332,7 @@ abstract class CustomPostType
     {
         return [
             'cb' => '<input type="checkbox" />',
-            'title' => $this->translate('title'),
+            'title' => $this->vbTranslate('Title'),
         ];
     }
 
@@ -354,7 +376,7 @@ abstract class CustomPostType
     public function getTertiaryColumns(): array
     {
         return [
-            'date' => $this->translate('Date'),
+            'date' => $this->vbTranslate('Date'),
         ];
     }
 

@@ -36,8 +36,8 @@ abstract class AddCustomPostTypes extends Feature
     {
         //  first of all get the post-types to be registered from sub-class
         foreach ($this->initPostTypes() as $postType) {
-            //  pass translator to post-type (for translating labels and buttons and such stuff)
-            $postType->setTranslator($this->getTranslator());
+            //  pass translators to post-type (for translating labels and buttons and such stuff)
+            $postType->setTranslators($this->getTranslator(), $this->getVbTranslator());
             //  activate the post-type
             $postType->activate();
             //  keep in mind the current post-type using its slug as key

@@ -67,6 +67,11 @@ abstract class CustomTaxonomy
     protected $translator;
 
     /**
+     * @var \Vierbeuter\WordPress\Service\Translator
+     */
+    protected $vbTranslator;
+
+    /**
      * @var array
      */
     protected $options;
@@ -163,13 +168,15 @@ abstract class CustomTaxonomy
     }
 
     /**
-     * Sets the translator.
+     * Sets the translators.
      *
      * @param \Vierbeuter\WordPress\Service\Translator $translator
+     * @param \Vierbeuter\WordPress\Service\Translator $vbTranslator
      */
-    public function setTranslator(Translator $translator): void
+    public function setTranslators(Translator $translator, Translator $vbTranslator): void
     {
         $this->translator = $translator;
+        $this->vbTranslator = $vbTranslator;
     }
 
     /**
@@ -183,6 +190,21 @@ abstract class CustomTaxonomy
     public function translate(string $text, string $context = null): string
     {
         return $this->translator->translate($text, $context);
+    }
+
+    /**
+     * Translates the given text using the vbTranslator, optionally using the context string passed as second parameter.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     * @param string|null $context
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text, string $context = null): string
+    {
+        return $this->vbTranslator->translate($text, $context);
     }
 
     /**
@@ -231,17 +253,17 @@ abstract class CustomTaxonomy
         return [
             'name' => $labelPlural,
             'singular_name' => $labelSingular,
-            'search_items' => sprintf($this->translate('Search %s'), $labelPlural),
-            'popular_items' => sprintf($this->translate('Popular %s'), $labelPlural),
-            'all_items' => sprintf($this->translate('All %s'), $labelPlural),
-            'edit_item' => sprintf($this->translate('Edit %s'), $labelSingular),
-            'update_item' => sprintf($this->translate('Update %s'), $labelSingular),
-            'add_new_item' => sprintf($this->translate('Add new %s', $this->getGender()), $labelSingular),
-            'new_item_name' => sprintf($this->translate('New %s Name', $this->getGender()), $labelSingular),
-            'separate_items_with_commas' => sprintf($this->translate('Separate %s with commas'), $labelPlural),
-            'add_or_remove_items' => sprintf($this->translate('Add or remove %s'), $labelPlural),
-            'choose_from_most_used' => sprintf($this->translate('Choose from the most used %s'), $labelPlural),
-            'not_found' => sprintf($this->translate('No %s found'), $labelPlural),
+            'search_items' => sprintf($this->vbTranslate('Search %s'), $labelPlural),
+            'popular_items' => sprintf($this->vbTranslate('Popular %s'), $labelPlural),
+            'all_items' => sprintf($this->vbTranslate('All %s'), $labelPlural),
+            'edit_item' => sprintf($this->vbTranslate('Edit %s'), $labelSingular),
+            'update_item' => sprintf($this->vbTranslate('Update %s'), $labelSingular),
+            'add_new_item' => sprintf($this->vbTranslate('Add new %s', $this->getGender()), $labelSingular),
+            'new_item_name' => sprintf($this->vbTranslate('New %s Name', $this->getGender()), $labelSingular),
+            'separate_items_with_commas' => sprintf($this->vbTranslate('Separate %s with commas'), $labelPlural),
+            'add_or_remove_items' => sprintf($this->vbTranslate('Add or remove %s'), $labelPlural),
+            'choose_from_most_used' => sprintf($this->vbTranslate('Choose from the most used %s'), $labelPlural),
+            'not_found' => sprintf($this->vbTranslate('No %s found'), $labelPlural),
             'menu_name' => ucfirst($labelPlural),
         ];
     }
