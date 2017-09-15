@@ -1,0 +1,144 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Vierbeuter WP-Core-Plugin\n"
+"POT-Creation-Date: 2017-09-15 16:39+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: AS <as@vierbeuter.de>\n"
+"Language-Team: Vierbeuter<info@vierbeuter.de>\n"
+"Language: de_DE@formal\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../src\n"
+"X-Poedit-KeywordsList: __;_e;_x;_n;translate;vbTranslate\n"
+"X-Generator: Poedit 2.0.1\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Vierbeuter/WordPress/Feature/AddCustomPostTypes.php:233
+#, php-format
+msgid "The column <code>%1$s</code> is unknown, no value to be rendered. Please implement <code>%2$s</code> method to determine a string-representation of the column value."
+msgstr "Die Spalte <code>%1$s</code> ist unbekannt, der Wert kann nicht ausgelesen werden. Bitte implementieren Sie die Methode <code>%2$s</code>, um eine String-Repräsentation des Werts zu ermitteln."
+
+#: Vierbeuter/WordPress/Feature/AddCustomPostTypes.php:235
+msgid "In case of a standard custom-field the implementation may look like the following:"
+msgstr "Eine Implementierung kann z.B. im Falle eines Standard-Custom-Fields wie folgt aussehen:"
+
+#: Vierbeuter/WordPress/Feature/AddCustomPostTypes.php:250
+#, php-format
+msgid "You can also use the <code>%1$s</code>-methods to render field values that are non-standard respectively of a specific type or kind such as the title and an image URL."
+msgstr "Außerdem können Sie auch die <code>%1$s</code>-Methoden verwenden, sollte es sich nicht um ein Standard-Custom-Field, sondern um ein spezielles Feld wie den Titel oder eine Bild-URL handeln."
+
+#: Vierbeuter/WordPress/Feature/CustomField/ImageField.php:31
+msgid "You can either insert an image-URL, upload a new image or choose an image from media library."
+msgstr "Geben Sie eine Bild-URL an, laden Sie ein neues Bild hoch oder wählen Sie eines aus der Methiathek aus."
+
+#: Vierbeuter/WordPress/Feature/CustomField/ImageField.php:64
+msgid "Media library / Upload image"
+msgstr "Mediathek / Bild hochladen"
+
+#: Vierbeuter/WordPress/Feature/CustomField/ImageField.php:101
+msgid "Choose or upload image"
+msgstr "Bild hochladen oder auswählen"
+
+#: Vierbeuter/WordPress/Feature/CustomField/ImageField.php:103
+msgid "Use this image"
+msgstr "Dieses Bild verwenden"
+
+#: Vierbeuter/WordPress/Feature/CustomField/PostTypeSelection.php:26
+msgid "—"
+msgstr "—"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:284
+msgid "Add new"
+msgstr "Neu anlegen"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:285
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:261
+#, php-format
+msgid "Add new %s"
+msgstr "Neue/n/s %s anlegen"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:286
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:259
+#, php-format
+msgid "Edit %s"
+msgstr "%s editieren"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:287
+#, php-format
+msgid "New %s"
+msgstr "Neue/n/s %s anlegen"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:288
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:289
+#, php-format
+msgid "View %s"
+msgstr "%s ansehen"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:290
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:256
+#, php-format
+msgid "Search %s"
+msgstr "%s suchen"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:291
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:266
+#, php-format
+msgid "No %s found"
+msgstr "Keine %s gefunden"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:292
+#, php-format
+msgid "No %s found in Trash."
+msgstr "Keine %s im Papierkorb gefunden."
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:293
+#, php-format
+msgid "Parent %s:"
+msgstr "Übergeordnete/n/s %s:"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:294
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:258
+#, php-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:335
+msgid "Title"
+msgstr "Titel"
+
+#: Vierbeuter/WordPress/Feature/CustomPostType/CustomPostType.php:379
+msgid "Date"
+msgstr "Datum"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:257
+#, php-format
+msgid "Popular %s"
+msgstr "Häufige %s"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:260
+#, php-format
+msgid "Update %s"
+msgstr "%s aktualisieren"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:262
+#, php-format
+msgid "New %s Name"
+msgstr "Neuer Name der/s %s"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:263
+#, php-format
+msgid "Separate %s with commas"
+msgstr "%s mit Komma trennen"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:264
+#, php-format
+msgid "Add or remove %s"
+msgstr "%s hinzufügen oder entfernen"
+
+#: Vierbeuter/WordPress/Feature/CustomTaxonomy/CustomTaxonomy.php:265
+#, php-format
+msgid "Choose from the most used %s"
+msgstr "Wählen Sie aus den häufig genutzten %s"
