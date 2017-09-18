@@ -23,29 +23,41 @@ trait HasTranslatorService
     {
         //  add service only once
         if (empty($this->getTranslator())) {
-            $this->addComponent('translator', new Translator($this->getPluginName()));
+            //  translator for the actual plugin
+            $translator = new Translator($this->getPluginName(), $this->getPluginDir() . 'languages/');
+            $this->addComponent('translator', $translator);
+            //  translator for the base classes / plugin core
+            $coreTranslator = new Translator('vb-wp-plugin-core', realpath(__DIR__ . '/../../../../languages/'));
+            $this->addComponent('translator_core', $coreTranslator);
         }
     }
 
     /**
      * Returns the translator service.
      *
+     * @param bool $returnCoreTranslator determines if the translator component for the plugin core has to be returned;
+     *     defaults to FALSE to return the translator component of the actual plugin
+     *
      * @return null|\Vierbeuter\WordPress\Service\Translator
      */
-    private function getTranslator(): ?Translator
+    private function getTranslator(bool $returnCoreTranslator = false): ?Translator
     {
-        return $this->getComponent('translator');
+        $name = 'translator' . ($returnCoreTranslator ? '_core' : '');
+
+        return $this->getComponent($name);
     }
 
     /**
      * Translates the given text.
      *
      * @param string $text
+     * @param bool $useCoreTranslator determines if the translator component for the plugin core has to be used;
+     *     defaults to FALSE to use the translator component of the actual plugin
      *
      * @return string
      */
-    public function translate(string $text): string
+    public function translate(string $text, bool $useCoreTranslator = false): string
     {
-        return $this->getTranslator()->translate($text);
+        return $this->getTranslator($useCoreTranslator)->translate($text);
     }
 }

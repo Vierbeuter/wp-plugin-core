@@ -13,58 +13,14 @@ abstract class CustomTaxonomy
 {
 
     /**
-     * male / masculine
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
+     * @var \Vierbeuter\WordPress\Service\Translator
      */
-    const GENDER_MALE = 'm';
-
-    /**
-     * feminine / female
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_FEMALE = 'f';
-
-    /**
-     * neuter / neutral / genderless
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_NEUTER = 'n';
-
-    /**
-     * both: female and/or male
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_FEMALE_AND_MALE = 'fm';
-
-    /**
-     * both: female and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_FEMALE_AND_NEUTER = 'fn';
-
-    /**
-     * both: male and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_MALE_AND_NEUTER = 'mn';
-
-    /**
-     * all: female, male and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::getGender()
-     */
-    const GENDER_ALL = 'a';
+    protected $translator;
 
     /**
      * @var \Vierbeuter\WordPress\Service\Translator
      */
-    protected $translator;
+    protected $vbTranslator;
 
     /**
      * @var array
@@ -135,24 +91,6 @@ abstract class CustomTaxonomy
     abstract public function getPostTypeSlugs(): array;
 
     /**
-     * Returns the gender.
-     *
-     * Background: In some languages (such as German) the nouns are of a specific gender.
-     * In case of doubt just returns the GENDER_ALL constant.
-     *
-     * @return string
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_MALE
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_FEMALE
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_FEMALE_AND_MALE
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_FEMALE_AND_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_MALE_AND_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy::GENDER_ALL
-     */
-    abstract public function getGender(): string;
-
-    /**
      * Returns the translator.
      *
      * @return \Vierbeuter\WordPress\Service\Translator
@@ -163,26 +101,41 @@ abstract class CustomTaxonomy
     }
 
     /**
-     * Sets the translator.
+     * Sets the translators.
      *
      * @param \Vierbeuter\WordPress\Service\Translator $translator
+     * @param \Vierbeuter\WordPress\Service\Translator $vbTranslator
      */
-    public function setTranslator(Translator $translator): void
+    public function setTranslators(Translator $translator, Translator $vbTranslator): void
     {
         $this->translator = $translator;
+        $this->vbTranslator = $vbTranslator;
     }
 
     /**
-     * Translates the given text, optionally using the context string passed as second parameter.
+     * Translates the given text.
      *
      * @param string $text
-     * @param string|null $context
      *
      * @return string
      */
-    public function translate(string $text, string $context = null): string
+    public function translate(string $text): string
     {
-        return $this->translator->translate($text, $context);
+        return $this->translator->translate($text);
+    }
+
+    /**
+     * Translates the given text using the vbTranslator.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text): string
+    {
+        return $this->vbTranslator->translate($text);
     }
 
     /**
@@ -231,17 +184,17 @@ abstract class CustomTaxonomy
         return [
             'name' => $labelPlural,
             'singular_name' => $labelSingular,
-            'search_items' => sprintf($this->translate('Search %s'), $labelPlural),
-            'popular_items' => sprintf($this->translate('Popular %s'), $labelPlural),
-            'all_items' => sprintf($this->translate('All %s'), $labelPlural),
-            'edit_item' => sprintf($this->translate('Edit %s'), $labelSingular),
-            'update_item' => sprintf($this->translate('Update %s'), $labelSingular),
-            'add_new_item' => sprintf($this->translate('Add new %s', $this->getGender()), $labelSingular),
-            'new_item_name' => sprintf($this->translate('New %s Name', $this->getGender()), $labelSingular),
-            'separate_items_with_commas' => sprintf($this->translate('Separate %s with commas'), $labelPlural),
-            'add_or_remove_items' => sprintf($this->translate('Add or remove %s'), $labelPlural),
-            'choose_from_most_used' => sprintf($this->translate('Choose from the most used %s'), $labelPlural),
-            'not_found' => sprintf($this->translate('No %s found'), $labelPlural),
+            'search_items' => sprintf($this->vbTranslate('Search %s'), $labelPlural),
+            'popular_items' => sprintf($this->vbTranslate('Popular %s'), $labelPlural),
+            'all_items' => sprintf($this->vbTranslate('All %s'), $labelPlural),
+            'edit_item' => sprintf($this->vbTranslate('Edit %s'), $labelSingular),
+            'update_item' => sprintf($this->vbTranslate('Update %s'), $labelSingular),
+            'add_new_item' => sprintf($this->vbTranslate('Add new %s'), $labelSingular),
+            'new_item_name' => sprintf($this->vbTranslate('New %s Name'), $labelSingular),
+            'separate_items_with_commas' => sprintf($this->vbTranslate('Separate %s with commas'), $labelPlural),
+            'add_or_remove_items' => sprintf($this->vbTranslate('Add or remove %s'), $labelPlural),
+            'choose_from_most_used' => sprintf($this->vbTranslate('Choose from the most used %s'), $labelPlural),
+            'not_found' => sprintf($this->vbTranslate('No %s found'), $labelPlural),
             'menu_name' => ucfirst($labelPlural),
         ];
     }
