@@ -1,4 +1,4 @@
-# Delevopment roadmap
+# Development roadmap
 
 *Todos and features for future releases.*
 
