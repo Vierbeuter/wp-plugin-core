@@ -13,55 +13,6 @@ abstract class CustomPostType
 {
 
     /**
-     * male / masculine
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_MALE = 'm';
-
-    /**
-     * feminine / female
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_FEMALE = 'f';
-
-    /**
-     * neuter / neutral / genderless
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_NEUTER = 'n';
-
-    /**
-     * both: female and/or male
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_FEMALE_AND_MALE = 'fm';
-
-    /**
-     * both: female and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_FEMALE_AND_NEUTER = 'fn';
-
-    /**
-     * both: male and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_MALE_AND_NEUTER = 'mn';
-
-    /**
-     * all: female, male and/or neuter
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getGender()
-     */
-    const GENDER_ALL = 'a';
-
-    /**
      * key for accessing child posts
      *
      * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getDataForExport()
@@ -81,6 +32,11 @@ abstract class CustomPostType
      * @var \Vierbeuter\WordPress\Service\Translator
      */
     protected $translator;
+
+    /**
+     * @var \Vierbeuter\WordPress\Service\Translator
+     */
+    protected $vbTranslator;
 
     /**
      * @var array
@@ -144,24 +100,6 @@ abstract class CustomPostType
     abstract public function getDescription(): string;
 
     /**
-     * Returns the gender.
-     *
-     * Background: In some languages (such as German) the nouns are of a specific gender.
-     * In case of doubt just returns the GENDER_ALL constant.
-     *
-     * @return string
-     *
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_MALE
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_FEMALE
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_FEMALE_AND_MALE
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_FEMALE_AND_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_MALE_AND_NEUTER
-     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::GENDER_ALL
-     */
-    abstract public function getGender(): string;
-
-    /**
      * Returns the translator.
      *
      * @return \Vierbeuter\WordPress\Service\Translator
@@ -172,26 +110,41 @@ abstract class CustomPostType
     }
 
     /**
-     * Sets the translator.
+     * Sets the translators.
      *
      * @param \Vierbeuter\WordPress\Service\Translator $translator
+     * @param \Vierbeuter\WordPress\Service\Translator $vbTranslator
      */
-    public function setTranslator(Translator $translator): void
+    public function setTranslators(Translator $translator, Translator $vbTranslator): void
     {
         $this->translator = $translator;
+        $this->vbTranslator = $vbTranslator;
     }
 
     /**
-     * Translates the given text, optionally using the context string passed as second parameter.
+     * Translates the given text.
      *
      * @param string $text
-     * @param string|null $context
      *
      * @return string
      */
-    public function translate(string $text, string $context = null): string
+    public function translate(string $text): string
     {
-        return $this->translator->translate($text, $context);
+        return $this->translator->translate($text);
+    }
+
+    /**
+     * Translates the given text using the vbTranslator.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text): string
+    {
+        return $this->vbTranslator->translate($text);
     }
 
     /**
@@ -259,17 +212,17 @@ abstract class CustomPostType
         return [
             'name' => $labelPlural,
             'singular_name' => $labelSingular,
-            'add_new' => $this->translate('Add new'),
-            'add_new_item' => sprintf($this->translate('Add new %s', $this->getGender()), $labelSingular),
-            'edit_item' => sprintf($this->translate('Edit %s'), $labelSingular),
-            'new_item' => sprintf($this->translate('New %s', $this->getGender()), $labelSingular),
-            'view_item' => sprintf($this->translate('View %s'), $labelSingular),
-            'view_items' => sprintf($this->translate('View %s'), $labelPlural),
-            'search_items' => sprintf($this->translate('Search %s'), $labelPlural),
-            'not_found' => sprintf($this->translate('No %s found'), $labelPlural),
-            'not_found_in_trash' => sprintf($this->translate('No %s found in Trash.'), $labelPlural),
-            'parent_item_colon' => sprintf($this->translate('Parent %s:', $this->getGender()), $labelSingular),
-            'all_items' => sprintf($this->translate('All %s'), $labelPlural),
+            'add_new' => $this->vbTranslate('Add new'),
+            'add_new_item' => sprintf($this->vbTranslate('Add new %s'), $labelSingular),
+            'edit_item' => sprintf($this->vbTranslate('Edit %s'), $labelSingular),
+            'new_item' => sprintf($this->vbTranslate('New %s'), $labelSingular),
+            'view_item' => sprintf($this->vbTranslate('View %s'), $labelSingular),
+            'view_items' => sprintf($this->vbTranslate('View %s'), $labelPlural),
+            'search_items' => sprintf($this->vbTranslate('Search %s'), $labelPlural),
+            'not_found' => sprintf($this->vbTranslate('No %s found'), $labelPlural),
+            'not_found_in_trash' => sprintf($this->vbTranslate('No %s found in Trash.'), $labelPlural),
+            'parent_item_colon' => sprintf($this->vbTranslate('Parent %s:'), $labelSingular),
+            'all_items' => sprintf($this->vbTranslate('All %s'), $labelPlural),
             'menu_name' => ucfirst($labelPlural),
         ];
     }
@@ -310,7 +263,7 @@ abstract class CustomPostType
     {
         return [
             'cb' => '<input type="checkbox" />',
-            'title' => $this->translate('title'),
+            'title' => $this->vbTranslate('Title'),
         ];
     }
 
@@ -354,7 +307,7 @@ abstract class CustomPostType
     public function getTertiaryColumns(): array
     {
         return [
-            'date' => $this->translate('Date'),
+            'date' => $this->vbTranslate('Date'),
         ];
     }
 
