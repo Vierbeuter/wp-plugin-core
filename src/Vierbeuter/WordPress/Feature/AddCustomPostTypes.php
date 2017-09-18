@@ -184,7 +184,7 @@ abstract class AddCustomPostTypes extends Feature
         //  determine requested post-type-slug
         $postTypeSlug = empty($_REQUEST['post_type']) ? null : $_REQUEST['post_type'];
         //  try to get the corresponding post-type
-        $postType = $this->getPostType($postTypeSlug);
+        $postType = empty($postTypeSlug) ? null : $this->getPostType($postTypeSlug);
 
         //  only if post-type found
         if (!empty($postType)) {
