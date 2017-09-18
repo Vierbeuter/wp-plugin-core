@@ -33,8 +33,8 @@ class Translator extends Service
         //  set directory path, ensure to have an absolute path with leading and trailing slash
         $this->languagesDir = '/' . trim($languagesDir, '/') . '/';
 
-        //  register action hook to load translation files
-        add_action('plugins_loaded', [$this, 'loadTextDomain']);
+        //  load translation file
+        $this->loadTextDomain();
     }
 
     /**
@@ -63,7 +63,7 @@ class Translator extends Service
     /**
      * Loads the translation file for current locale.
      */
-    public function loadTextDomain()
+    protected function loadTextDomain(): void
     {
         /**
          * Filters a plugin's locale.
