@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.2.0) (2017-09-18)
+### Added
+ * made the whole thing translatable (`Translator` component has been existing but without actual functionality)
+ * also added differentiation between core translations and plugin translations
+ * added German translations for some texts of base classes
+
 ## [0.1.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.1.0) (2017-09-14)
 First version of WP plugin core released. This one contains:
  * base architecture for implementing onw plugins with own features
