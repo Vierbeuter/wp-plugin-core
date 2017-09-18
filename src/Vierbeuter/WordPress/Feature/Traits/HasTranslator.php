@@ -43,16 +43,15 @@ trait HasTranslator
     }
 
     /**
-     * Translates the given text, optionally using the context string passed as second parameter.
+     * Translates the given text.
      *
      * @param string $text
-     * @param string|null $context
      *
      * @return string
      */
-    public function translate(string $text, string $context = null): string
+    public function translate(string $text): string
     {
-        return $this->translator->translate($text, $context);
+        return $this->translator->translate($text);
     }
 
     /**
@@ -76,17 +75,16 @@ trait HasTranslator
     }
 
     /**
-     * Translates the given text, optionally using the context string passed as second parameter.
+     * Translates the given text.
      *
      * To be used within core components only (unless you want to get untranslated texts as return value).
      *
      * @param string $text
-     * @param string|null $context
      *
      * @return string
      */
-    public function vbTranslate(string $text, string $context = null): string
+    public function vbTranslate(string $text): string
     {
-        return $this->vbTranslator->translate($text, $context);
+        return $this->vbTranslator->translate($text);
     }
 }

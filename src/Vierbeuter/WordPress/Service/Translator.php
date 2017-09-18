@@ -40,24 +40,15 @@ class Translator extends Service
     /**
      * Returns the translated text for the given one.
      *
-     * Optionally a context can be passed as information for the translators in case of the given text collides with
-     * similar translatable text found at another location but with different translated context.
-     *
      * @param string $text
-     * @param string|null $context
      *
      * @return string
      *
      * @see __()
-     * @see _x()
      */
-    public function translate(string $text, string $context = null): string
+    public function translate(string $text): string
     {
-        if (empty($context)) {
-            return __($text, $this->domain);
-        }
-
-        return _x($text, $context, $this->domain);
+        return __($text, $this->domain);
     }
 
     /**
