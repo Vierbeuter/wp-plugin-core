@@ -3,7 +3,7 @@
 namespace Vierbeuter\WordPress\Feature\Traits;
 
 /**
- * The HasWpHookSupport trait provides
+ * The HasWpHookSupport trait provides methods for easily hooking into WordPress actions and filters.
  *
  * @package Vierbeuter\WordPress\Feature\Traits
  */
