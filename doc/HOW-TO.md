@@ -237,7 +237,7 @@ class TestFeature extends Feature
     protected function getActionHooks(): array
     {
         return [
-            /** @see YourAwesomeCompany\AnyNamespace\Feature\TestFeature::wp_loaded() */
+            /** @see \YourAwesomeCompany\AnyNamespace\Feature\TestFeature::wp_loaded() */
             'wp_loaded',
         ];
     }
@@ -258,7 +258,7 @@ class TestFeature extends Feature
     /**
      * Callback method for printing success message.
      *
-     * @see YourAwesomeCompany\AnyNamespace\Feature\TestFeature::wp_loaded()
+     * @see \YourAwesomeCompany\AnyNamespace\Feature\TestFeature::wp_loaded()
      */
     public function printSuccess(): void
     {
