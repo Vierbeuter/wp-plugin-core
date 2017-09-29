@@ -335,6 +335,6 @@ To step deeper into the real plugin development please download the boilerplate 
 
 *// LINK TO PLUGIN BOILERPLATE FOLLOWS SOON …*
 
-#### 7) Translating your plugin
+### 7) Translating your plugin
 
 *// TO BE CONTINUED …*
