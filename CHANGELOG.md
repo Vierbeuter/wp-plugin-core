@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.2.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.2.2) (2017-10-04)
+### Fixed
+ * up to now autoloading and plugin activation only worked for a single plugin, from now on multiple plugins can be regsitered and activated
+
 ## [0.2.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.2.0) (2017-09-18)
 ### Added
  * made the whole thing translatable (`Translator` component has been existing but without actual functionality)
