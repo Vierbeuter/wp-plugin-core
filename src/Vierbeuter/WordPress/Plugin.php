@@ -15,11 +15,11 @@ abstract class Plugin
 {
 
     /**
-     * @var \Vierbeuter\WordPress\Plugin
+     * @var \Vierbeuter\WordPress\Plugin[]
      *
      * the WordPress plugin itself
      */
-    protected static $plugin;
+    protected static $plugins;
 
     /**
      * include properties and methods for retrieving general plugin data
@@ -76,9 +76,9 @@ abstract class Plugin
     public static function activate(string $pluginFile, array $parameters = [])
     {
         //  only activate a plugin once
-        if (empty(static::$plugin)) {
+        if (empty(static::$plugins[get_called_class()])) {
             //  construct new instance to initialize and activate the plugin
-            static::$plugin = new static($pluginFile, $parameters);
+            static::$plugins[get_called_class()] = new static($pluginFile, $parameters);
         }
     }
 
@@ -93,11 +93,11 @@ abstract class Plugin
      */
     public static function getInstance(): Plugin
     {
-        if (empty(static::$plugin)) {
+        if (empty(static::$plugins[get_called_class()])) {
             throw new \Exception('Plugin not activated, invoke activate(…) method first before using it.');
         }
 
-        return static::$plugin;
+        return static::$plugins[get_called_class()];
     }
 
     /**
