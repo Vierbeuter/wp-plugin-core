@@ -16,9 +16,9 @@ class Autoloader
     private static $autoloader;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $sourcePath;
+    private $sourcePaths;
 
     /**
      * Registers an autoloader for the current plugin.
@@ -36,21 +36,31 @@ class Autoloader
      */
     public static function register(string $pluginFile, string $sourceDir = 'src'): void
     {
-        //  register autoloader only once
-        if (empty(self::$autoloader)) {
-            //  determine base path, add trailing slash
-            $pluginPath = rtrim(dirname($pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-            //  also ensure to have trailing slash for given source directory
-            $sourceDir = trim($sourceDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        /**
+         * register autoload method
+         */
 
+        //  create autoloader only once
+        if (empty(self::$autoloader)) {
             //  create autoloader
             self::$autoloader = new static();
-            //  set path to sources
-            self::$autoloader->sourcePath = $pluginPath . $sourceDir;
+            self::$autoloader->sourcePaths = [];
 
             //  register the autoload method
             spl_autoload_register([self::$autoloader, 'autoload']);
         }
+
+        /**
+         * register plugin files
+         */
+
+        //  determine base path, add trailing slash
+        $pluginPath = rtrim(dirname($pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        //  also ensure to have trailing slash for given source directory
+        $sourceDir = trim($sourceDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+        //  add path to plugin sources
+        self::$autoloader->sourcePaths[$pluginFile] = $pluginPath . $sourceDir;
     }
 
     /**
@@ -62,11 +72,18 @@ class Autoloader
     {
         //  get file path for the given class (namespace corresponds to directory structure)
         $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
-        $filePath = $this->sourcePath . $fileName;
 
-        //  include file for class unless it doesn't exist
-        if (file_exists($filePath)) {
-            require_once $filePath;
+        //  try all registered source paths
+        foreach ($this->sourcePaths as $sourcePath) {
+            $filePath = $sourcePath . $fileName;
+
+            //  include file for class unless it doesn't exist
+            if (file_exists($filePath)) {
+                require_once $filePath;
+
+                //  no other source paths to check
+                return;
+            }
         }
     }
 }
