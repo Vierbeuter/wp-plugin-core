@@ -77,10 +77,36 @@ abstract class AddCustomTaxonomies extends Feature
      */
     protected function getActionHooks(): array
     {
-        return [
+        $hooks = [
+            //  hook for registering all taxonomies
             /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::init() */
             'init',
+            //  hooks for saving custom-field values
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::create_term() */
+            'create_term' => [
+                'args' => 3,
+            ],
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::edit_terms() */
+            'edit_terms' => [
+                'args' => 2,
+            ],
         ];
+
+        //  iterate all taxonomies to add taxonomy-specific hooks
+        foreach ($this->getTaxonomies() as $taxonomy) {
+            //  hook for adding custom fields to "new taxonomy" form
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::renderFormFieldsNew() */
+            $hooks[$taxonomy->getSlug() . '_add_form_fields'] = 'renderFormFieldsNew';
+
+            //  hook for adding custom fields to "edit taxonomy" form
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::renderFormFieldsEdit() */
+            $hooks[$taxonomy->getSlug() . '_edit_form_fields'] = [
+                'method' => 'renderFormFieldsEdit',
+                'args' => 2,
+            ];
+        }
+
+        return $hooks;
     }
 
     /**
@@ -96,5 +122,145 @@ abstract class AddCustomTaxonomies extends Feature
             //  register each taxonomy
             register_taxonomy($taxonomy->getSlug(), $taxonomy->getPostTypeSlugs(), $taxonomy->getOptions());
         }
+    }
+
+    /**
+     * Hooks into the same-named action hook to save values of custom-fields for new (freshly created) terms.
+     *
+     * @param int $termId
+     * @param int $taxonomyId
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/hooks/create_term
+     */
+    public function create_term(int $termId, int $taxonomyId, string $taxonomySlug): void
+    {
+        $this->saveCustomFieldValues($termId, $taxonomySlug);
+    }
+
+    /**
+     * Hooks into the same-named action hook to save values of custom-fields for edited (changed and updated) terms.
+     *
+     * @param int $termId
+     * @param string $taxonomySlug
+     *
+     * @see https://codex.wordpress.org/Plugin_API/Action_Reference/edit_terms
+     */
+    public function edit_terms(int $termId, string $taxonomySlug): void
+    {
+        $this->saveCustomFieldValues($termId, $taxonomySlug);
+    }
+
+    /**
+     * Saves the given term's custom-field values.
+     *
+     * @param int $termId
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/functions/update_term_meta
+     */
+    protected function saveCustomFieldValues(int $termId, string $taxonomySlug): void
+    {
+        //  iterate all taxonomies
+        /** @var CustomTaxonomy $taxonomy */
+        foreach ($this->getTaxonomies() as $taxonomy) {
+
+            //  only save field values for given taxonomy
+            if ($taxonomy->getSlug() == $taxonomySlug) {
+
+                //  save each field value
+                /** @var \Vierbeuter\WordPress\Feature\CustomField\CustomField $field */
+                foreach ($taxonomy->getFields() as $field) {
+                    //  TODO: check nonce
+
+                    //  get value of custom-field
+                    $dbMetaKey = $this->getDbMetaKey($taxonomySlug, $field->getSlug());
+                    $value = empty($_POST[$field->getSlug()]) ? null : $_POST[$field->getSlug()];
+
+                    update_term_meta($termId, $dbMetaKey, $value);
+                }
+
+                //  stop iteration --> no other taxonomies to save field values for
+                break;
+            }
+        }
+    }
+
+    /**
+     * Renders the custom-fields for given taxonomy.
+     *
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/hooks/taxonomy_add_form_fields/
+     */
+    public function renderFormFieldsNew(string $taxonomySlug): void
+    {
+        //  iterate all taxonomies
+        /** @var CustomTaxonomy $taxonomy */
+        foreach ($this->getTaxonomies() as $taxonomy) {
+
+            //  only render fields for given taxonomy
+            if ($taxonomy->getSlug() == $taxonomySlug) {
+
+                //  render fields
+                /** @var \Vierbeuter\WordPress\Feature\CustomField\CustomField $field */
+                foreach ($taxonomy->getFields() as $field) {
+                    //  TODO: add nonce field to be checked on save (saveTerm)
+                    $field->renderTaxonomyNew($field->getSlug());
+                }
+
+                //  stop iteration --> no other taxonomies to render fields for
+                break;
+            }
+        }
+    }
+
+    /**
+     * Renders the custom-fields for given taxonomy.
+     *
+     * @param \WP_Term $term
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/hooks/taxonomy_edit_form_fields/
+     * @see https://developer.wordpress.org/reference/functions/get_term_meta/
+     */
+    public function renderFormFieldsEdit(\WP_Term $term, string $taxonomySlug): void
+    {
+        //  iterate all taxonomies
+        /** @var CustomTaxonomy $taxonomy */
+        foreach ($this->getTaxonomies() as $taxonomy) {
+
+            //  only render fields for given taxonomy
+            if ($taxonomy->getSlug() == $taxonomySlug) {
+
+                //  render fields
+                /** @var \Vierbeuter\WordPress\Feature\CustomField\CustomField $field */
+                foreach ($taxonomy->getFields() as $field) {
+                    //  get value of custom-field
+                    $dbMetaKey = $this->getDbMetaKey($taxonomySlug, $field->getSlug());
+                    $value = get_term_meta($term->term_id, $dbMetaKey, true);
+
+                    //  render field
+                    $field->renderTaxonomyEdit($term, $field->getSlug(), $value);
+                }
+
+                //  stop iteration --> no other taxonomies to render fields for
+                break;
+            }
+        }
+    }
+
+    /**
+     * Returns the database key for accessing the meta-value.
+     *
+     * @param string $taxonomySlug
+     * @param string $fieldSlug
+     *
+     * @return string
+     */
+    protected function getDbMetaKey(string $taxonomySlug, string $fieldSlug): string
+    {
+        //  concat slug of taxonomy with slug of custom-field
+        return $taxonomySlug . '-' . $fieldSlug;
     }
 }

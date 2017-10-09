@@ -28,8 +28,7 @@ class ImageField extends CustomField
      */
     function __construct(string $slug, string $label, string $description = null, bool $use_attachment_id = true)
     {
-        $defaultDescription = __('You can either insert an image-URL, upload a new image or choose an image from media library.',
-            VBC_LANGUAGES_DOMAIN);
+        $defaultDescription = $this->vbTranslate('You can either insert an image-URL, upload a new image or choose an image from media library.');
         parent::__construct($slug, $label, empty($description) ? $defaultDescription : $description);
 
         $this->useAttachmentId = $use_attachment_id;
@@ -38,50 +37,49 @@ class ImageField extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderField(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         //	define field-ids for preview and upload-button
         $previewId = $fieldId . '_preview';
         $buttonId = $fieldId . '_upload';
 
-        //	given $value is the image
-		//	(it's either numeric which is the attachment id or it's alphanumeric which is the image-URL)
+        //  given $value is the image
+        //  (it's either numeric which is the attachment id or it's alphanumeric which is the image-URL)
         $image = $value;
 
-        //	if ID is given
+        //  if ID is given
         if (is_numeric($image)) {
-        	//	load URL from database
+            //  load URL from database
             $image = wp_get_attachment_thumb_url($image);
         }
-        //	else it's already an image-URL
+        //  else it's already an image-URL
 
         echo '<img id="' . $previewId . '" src="' . $image . '" style="max-width: 500px; max-height: 150px; display: none;" alt="kein Bild" /><div style="display: block;"></div>';
         echo '<input type="text" id="' . $fieldId . '" name="' . $fieldId . '" value="' . ($this->useAttachmentId ? $value : $image) . '" />';
-        echo '<input id="' . $buttonId . '" class="button" type="button" value="' . __('Media library / Upload image',
-                VBC_LANGUAGES_DOMAIN) . '" />';
+        echo '<input id="' . $buttonId . '" class="button" type="button" value="' . $this->vbTranslate('Media library / Upload image') . '" />';
     }
 
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderAnythingAfterField(\WP_Post $post, string $fieldId, string $value = null):void
+    protected function renderAnythingAfterField($postOrTerm = null, string $fieldId, string $value = null): void
     {
-		//	activate JS-libs and -APIs for the media library to make the following JS snippet work which uses the media-uploader
+        //  activate JS-libs and -APIs for the media library to make the following JS snippet work which uses the media-uploader
         wp_enqueue_media();
 
-        //	define field-ids for preview and upload-button
+        //  define field-ids for preview and upload-button
         $previewId = $fieldId . '_preview';
         $buttonId = $fieldId . '_upload';
 
-        //	JS for using the media library
+        //  JS for using the media library
         ?>
 		<script type="text/javascript">
 			jQuery(document).ready(function ($) {
@@ -98,9 +96,9 @@ class ImageField extends CustomField
 
 					//  extend the wp.media object
 					custom_uploader = wp.media.frames.file_frame = wp.media({
-						title: '<?php echo __('Choose or upload image', VBC_LANGUAGES_DOMAIN); ?>',
+						title: '<?php echo $this->vbTranslate('Choose or upload image'); ?>',
 						button: {
-							text: '<?php echo __('Use this image', VBC_LANGUAGES_DOMAIN); ?>'
+							text: '<?php echo $this->vbTranslate('Use this image'); ?>'
 						},
 						multiple: false
 					});

@@ -42,6 +42,34 @@ abstract class CustomField
     }
 
     /**
+     * Translates the given text.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function translate(string $text): string
+    {
+        //  TODO: use translator!
+        return $text;
+    }
+
+    /**
+     * Translates the given text using the vbTranslator.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text): string
+    {
+        //  TODO: use translator!
+        return $text;
+    }
+
+    /**
      * Sets the slug.
      *
      * Caution: This is no a "fully qualified" slug of the custom field, but the last part of it which is just the $slug
@@ -118,10 +146,10 @@ abstract class CustomField
      */
     public function render(\WP_Post $post, string $fieldId, string $value = null): void
     {
-        //  heade area ("left side")
+        //  header area ("left side")
         echo '<th scope="row">';
         //  label
-        $this->renderLabel($post, $fieldId, $value);
+        $this->renderLabel($fieldId);
         echo '</th>';
 
         //  input area ("right side")
@@ -129,20 +157,77 @@ abstract class CustomField
         //  the actual input field
         $this->renderField($post, $fieldId, $value);
         //  optional description/usage hint
-        $this->renderDescription($post, $fieldId, $value);
+        /**
+         * styling with CSS class "custom-field-note"
+         *
+         * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head()
+         */
+        $this->renderDescription($fieldId, 'custom-field-note clear');
         //  other… e.g. Javascript
         $this->renderAnythingAfterField($post, $fieldId, $value);
         echo '</td>';
     }
 
     /**
-     * Renders the label's markup.
+     * Renders the markup of this custom-field for a taxonomy's term creation form.
      *
-     * @param \WP_Post $post
+     * @param string $fieldId
+     */
+    public function renderTaxonomyNew(string $fieldId): void
+    {
+        echo '<div class="form-field term-' . $fieldId . '-wrap">';
+
+        //  label
+        $this->renderLabel($fieldId);
+
+        //  the actual input field
+        $this->renderField(null, $fieldId);
+        //  optional description/usage hint
+        $this->renderDescription($fieldId);
+        //  other… e.g. Javascript
+        $this->renderAnythingAfterField(null, $fieldId);
+
+        echo '</div>';
+    }
+
+    /**
+     * Renders the markup of this custom-field for a taxonomy's edit page.
+     *
+     * @param \WP_Term $term
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderLabel(\WP_Post $post, string $fieldId, string $value = null): void
+    public function renderTaxonomyEdit(\WP_Term $term, string $fieldId, string $value = null): void
+    {
+        //  wrapper begin
+        echo '<tr class="form-field term-' . $fieldId . '-wrap">';
+
+        //  header area ("left side")
+        echo '<th scope="row">';
+        //  label
+        $this->renderLabel($fieldId);
+        echo '</th>';
+
+        //  input area ("right side")
+        echo '<td>';
+        //  the actual input field
+        $this->renderField($term, $fieldId, $value);
+        //  optional description/usage hint
+        $this->renderDescription($fieldId, 'description');
+        //  other… e.g. Javascript
+        $this->renderAnythingAfterField($term, $fieldId, $value);
+        echo '</td>';
+
+        //  wrapper end
+        echo '</tr>';
+    }
+
+    /**
+     * Renders the label's markup.
+     *
+     * @param string $fieldId
+     */
+    protected function renderLabel(string $fieldId): void
     {
         echo '<label for="' . $fieldId . '">' . $this->label . '</label>';
     }
@@ -150,39 +235,33 @@ abstract class CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    abstract protected function renderField(\WP_Post $post, string $fieldId, string $value = null): void;
+    abstract protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void;
 
     /**
      * Renders the description's markup.
      *
-     * @param \WP_Post $post
      * @param string $fieldId
-     * @param string|null $value
+     * @param string $class
      */
-    protected function renderDescription(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderDescription(string $fieldId, string $class = ''): void
     {
         if (!empty($this->description)) {
-            /**
-             * styling with CSSclass "custom-field-note"
-             *
-             * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head()
-             */
-            echo '<p class="custom-field-note clear">' . $this->description . '</p>';
+            echo '<p' . (empty($class) ? '' : ' class="' . $class . '"') . '>' . $this->description . '</p>';
         }
     }
 
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderAnythingAfterField(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderAnythingAfterField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         //  may be overridden
     }

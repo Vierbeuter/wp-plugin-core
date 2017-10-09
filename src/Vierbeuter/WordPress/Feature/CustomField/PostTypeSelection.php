@@ -20,10 +20,10 @@ class PostTypeSelection extends DropdownSelection
      *
      * @return array
      */
-    protected function getSelectionData():array
+    protected function getSelectionData(): array
     {
         $options = [
-            '' => __('—', VBC_LANGUAGES_DOMAIN),
+            '' => $this->vbTranslate('—'),
         ];
 
         foreach (get_post_types([], 'objects') as $post_type) {

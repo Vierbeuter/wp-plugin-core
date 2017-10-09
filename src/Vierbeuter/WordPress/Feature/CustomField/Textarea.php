@@ -13,11 +13,11 @@ class Textarea extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderField(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         echo '<textarea id="' . $fieldId . '" name="' . $fieldId . '">' . $value . '</textarea>';
     }

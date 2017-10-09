@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.3.0) (2017-10-09)
+### Added
+ * custom-field support for taxonomies (similar to custom-fields for post-types) 
+
 ## [0.2.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.2.2) (2017-10-04)
 ### Fixed
  * up to now autoloading and plugin activation only worked for a single plugin, from now on multiple plugins can be regsitered and activated

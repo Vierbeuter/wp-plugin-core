@@ -198,4 +198,11 @@ abstract class CustomTaxonomy
             'menu_name' => ucfirst($labelPlural),
         ];
     }
+
+    /**
+     * Returns all custom fields.
+     *
+     * @return \Vierbeuter\WordPress\Feature\CustomField\CustomField[]
+     */
+    abstract public function getFields(): array;
 }
