@@ -13,11 +13,11 @@ abstract class RadioSelection extends Selection
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    function renderField($postOrTerm, string $fieldId, string $value = null): void
+    function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         echo '<ul>';
 

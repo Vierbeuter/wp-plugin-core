@@ -46,15 +46,15 @@ class CheckboxesForReferencedPosts extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    function renderField($postOrTerm, string $fieldId, string $value = null): void
+    function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
-        //	check if post given
-        if (!$postOrTerm instanceof \WP_Post) {
-            //	currently no other type allowed than posts
+        //  check if non-empty post given
+        if (empty($postOrTerm) || !$postOrTerm instanceof \WP_Post) {
+            //  currently no other type allowed than posts
             throw new \InvalidArgumentException('Currently no taxonomy support, use this field on custom post-types only.');
         }
 

@@ -13,11 +13,9 @@ abstract class Selection extends CustomField
     /**
      * Renders the label's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
-     * @param string|null $value
      */
-    protected function renderLabel($postOrTerm, string $fieldId, string $value = null): void
+    protected function renderLabel(string $fieldId): void
     {
         echo '<label>' . $this->label . '</label>';
     }

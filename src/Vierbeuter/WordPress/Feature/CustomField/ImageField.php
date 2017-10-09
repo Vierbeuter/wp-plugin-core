@@ -38,11 +38,11 @@ class ImageField extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderField($postOrTerm, string $fieldId, string $value = null): void
+    protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         //	define field-ids for preview and upload-button
         $previewId = $fieldId . '_preview';
@@ -68,11 +68,11 @@ class ImageField extends CustomField
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderAnythingAfterField($postOrTerm, string $fieldId, string $value = null): void
+    protected function renderAnythingAfterField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         //  activate JS-libs and -APIs for the media library to make the following JS snippet work which uses the media-uploader
         wp_enqueue_media();

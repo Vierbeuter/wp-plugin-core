@@ -13,11 +13,9 @@ class ReadOnly extends CustomField
     /**
      * Renders the label's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
-     * @param string|null $value
      */
-    protected function renderLabel($postOrTerm, string $fieldId, string $value = null): void
+    protected function renderLabel(string $fieldId): void
     {
         echo '<label>' . $this->label . '</label>';
     }
@@ -25,11 +23,11 @@ class ReadOnly extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term $postOrTerm
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderField($postOrTerm, string $fieldId, string $value = null): void
+    protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
         echo '<span class="custom-field-note">– nicht editierbar –</span>';
         echo '<input type="hidden" name="' . $fieldId . '" value="' . htmlentities($value) . '" />';
