@@ -81,7 +81,11 @@ abstract class AddCustomTaxonomies extends Feature
             //  hook for registering all taxonomies
             /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::init() */
             'init',
-            //  hook for saving custom-field values
+            //  hooks for saving custom-field values
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::create_term() */
+            'create_term' => [
+                'args' => 3,
+            ],
             /** @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::edit_terms() */
             'edit_terms' => [
                 'args' => 2,
@@ -121,20 +125,65 @@ abstract class AddCustomTaxonomies extends Feature
     }
 
     /**
-     * Hooks into the same-named action hook to save values of custom-fields.
+     * Hooks into the same-named action hook to save values of custom-fields for new (freshly created) terms.
      *
      * @param int $termId
-     * @param string $taxonomy
+     * @param int $taxonomyId
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/hooks/create_term
+     */
+    public function create_term(int $termId, int $taxonomyId, string $taxonomySlug): void
+    {
+        $this->saveCustomFieldValues($termId, $taxonomySlug);
+    }
+
+    /**
+     * Hooks into the same-named action hook to save values of custom-fields for edited (changed and updated) terms.
+     *
+     * @param int $termId
+     * @param string $taxonomySlug
      *
      * @see https://codex.wordpress.org/Plugin_API/Action_Reference/edit_terms
-     * @see https://codex.wordpress.org/Function_Reference/update_term_meta
      */
-    public function edit_terms(int $termId, string $taxonomy): void
+    public function edit_terms(int $termId, string $taxonomySlug): void
     {
-        //$term = get_term($termId, $taxonomy);
-        //$termSlug = $term->slug;
+        $this->saveCustomFieldValues($termId, $taxonomySlug);
+    }
 
-        //  TODO: implement method: iterate form fields and save meta-values (have in mind to check nonce)
+    /**
+     * Saves the given term's custom-field values.
+     *
+     * @param int $termId
+     * @param string $taxonomySlug
+     *
+     * @see https://developer.wordpress.org/reference/functions/update_term_meta
+     */
+    protected function saveCustomFieldValues(int $termId, string $taxonomySlug): void
+    {
+        //  iterate all taxonomies
+        /** @var CustomTaxonomy $taxonomy */
+        foreach ($this->getTaxonomies() as $taxonomy) {
+
+            //  only save field values for given taxonomy
+            if ($taxonomy->getSlug() == $taxonomySlug) {
+
+                //  save each field value
+                /** @var \Vierbeuter\WordPress\Feature\CustomField\CustomField $field */
+                foreach ($taxonomy->getFields() as $field) {
+                    //  TODO: check nonce
+
+                    //  get value of custom-field
+                    $dbMetaKey = $this->getDbMetaKey($taxonomySlug, $field->getSlug());
+                    $value = empty($_POST[$field->getSlug()]) ? null : $_POST[$field->getSlug()];
+
+                    update_term_meta($termId, $dbMetaKey, $value);
+                }
+
+                //  stop iteration --> no other taxonomies to render fields for
+                break;
+            }
+        }
     }
 
     /**
@@ -156,7 +205,7 @@ abstract class AddCustomTaxonomies extends Feature
                 //  render fields
                 /** @var \Vierbeuter\WordPress\Feature\CustomField\CustomField $field */
                 foreach ($taxonomy->getFields() as $field) {
-                    //  TODO: add nonce field to be checked on save (edit_terms)
+                    //  TODO: add nonce field to be checked on save (saveTerm)
                     $field->renderTaxonomyNew($field->getSlug());
                 }
 
