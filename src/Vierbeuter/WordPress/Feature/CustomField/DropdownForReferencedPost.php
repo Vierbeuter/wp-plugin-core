@@ -13,14 +13,20 @@ class DropdownForReferencedPost extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      *
      * @see https://github.com/laktek/really-simple-color-picker
      */
-    function renderField(\WP_Post $post, string $fieldId, string $value = null): void
+    function renderField($postOrTerm, string $fieldId, string $value = null): void
     {
+        //	check if post given
+        if (!$postOrTerm instanceof \WP_Post) {
+            //	currently no other type allowed than posts
+            throw new \InvalidArgumentException('Currently no taxonomy support, use this field on custom post-types only.');
+        }
+
         //	the actual input to be POSTed
         echo '<input type="text" style="display: none;" id="' . $fieldId . '" name="' . $fieldId . '" value="' . $value . '" />';
 
@@ -73,11 +79,11 @@ class DropdownForReferencedPost extends CustomField
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderAnythingAfterField(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderAnythingAfterField($postOrTerm, string $fieldId, string $value = null): void
     {
         ?>
 		<script type="text/javascript">

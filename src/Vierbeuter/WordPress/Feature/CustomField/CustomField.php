@@ -138,11 +138,11 @@ abstract class CustomField
     /**
      * Renders the label's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderLabel(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderLabel($postOrTerm, string $fieldId, string $value = null): void
     {
         echo '<label for="' . $fieldId . '">' . $this->label . '</label>';
     }
@@ -150,20 +150,20 @@ abstract class CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    abstract protected function renderField(\WP_Post $post, string $fieldId, string $value = null): void;
+    abstract protected function renderField($postOrTerm, string $fieldId, string $value = null): void;
 
     /**
      * Renders the description's markup.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderDescription(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderDescription($postOrTerm, string $fieldId, string $value = null): void
     {
         if (!empty($this->description)) {
             /**
@@ -178,11 +178,11 @@ abstract class CustomField
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post $post
+     * @param \WP_Post|\WP_Term $postOrTerm
      * @param string $fieldId
      * @param string|null $value
      */
-    protected function renderAnythingAfterField(\WP_Post $post, string $fieldId, string $value = null): void
+    protected function renderAnythingAfterField($postOrTerm, string $fieldId, string $value = null): void
     {
         //  may be overridden
     }

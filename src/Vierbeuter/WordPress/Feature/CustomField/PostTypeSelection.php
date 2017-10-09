@@ -20,7 +20,7 @@ class PostTypeSelection extends DropdownSelection
      *
      * @return array
      */
-    protected function getSelectionData():array
+    protected function getSelectionData(): array
     {
         $options = [
             '' => __('—', VBC_LANGUAGES_DOMAIN),
