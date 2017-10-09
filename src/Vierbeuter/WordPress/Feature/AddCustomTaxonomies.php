@@ -180,7 +180,7 @@ abstract class AddCustomTaxonomies extends Feature
                     update_term_meta($termId, $dbMetaKey, $value);
                 }
 
-                //  stop iteration --> no other taxonomies to render fields for
+                //  stop iteration --> no other taxonomies to save field values for
                 break;
             }
         }
