@@ -28,8 +28,7 @@ class ImageField extends CustomField
      */
     function __construct(string $slug, string $label, string $description = null, bool $use_attachment_id = true)
     {
-        $defaultDescription = __('You can either insert an image-URL, upload a new image or choose an image from media library.',
-            VBC_LANGUAGES_DOMAIN);
+        $defaultDescription = $this->vbTranslate('You can either insert an image-URL, upload a new image or choose an image from media library.');
         parent::__construct($slug, $label, empty($description) ? $defaultDescription : $description);
 
         $this->useAttachmentId = $use_attachment_id;
@@ -61,8 +60,7 @@ class ImageField extends CustomField
 
         echo '<img id="' . $previewId . '" src="' . $image . '" style="max-width: 500px; max-height: 150px; display: none;" alt="kein Bild" /><div style="display: block;"></div>';
         echo '<input type="text" id="' . $fieldId . '" name="' . $fieldId . '" value="' . ($this->useAttachmentId ? $value : $image) . '" />';
-        echo '<input id="' . $buttonId . '" class="button" type="button" value="' . __('Media library / Upload image',
-                VBC_LANGUAGES_DOMAIN) . '" />';
+        echo '<input id="' . $buttonId . '" class="button" type="button" value="' . $this->vbTranslate('Media library / Upload image') . '" />';
     }
 
     /**
@@ -98,9 +96,9 @@ class ImageField extends CustomField
 
 					//  extend the wp.media object
 					custom_uploader = wp.media.frames.file_frame = wp.media({
-						title: '<?php echo __('Choose or upload image', VBC_LANGUAGES_DOMAIN); ?>',
+						title: '<?php echo $this->vbTranslate('Choose or upload image'); ?>',
 						button: {
-							text: '<?php echo __('Use this image', VBC_LANGUAGES_DOMAIN); ?>'
+							text: '<?php echo $this->vbTranslate('Use this image'); ?>'
 						},
 						multiple: false
 					});

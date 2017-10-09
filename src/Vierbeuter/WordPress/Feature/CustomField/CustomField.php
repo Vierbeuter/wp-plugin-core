@@ -42,6 +42,34 @@ abstract class CustomField
     }
 
     /**
+     * Translates the given text.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function translate(string $text): string
+    {
+        //  TODO: use translator!
+        return $text;
+    }
+
+    /**
+     * Translates the given text using the vbTranslator.
+     *
+     * To be used within core components only (unless you want to get untranslated texts as return value).
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public function vbTranslate(string $text): string
+    {
+        //  TODO: use translator!
+        return $text;
+    }
+
+    /**
      * Sets the slug.
      *
      * Caution: This is no a "fully qualified" slug of the custom field, but the last part of it which is just the $slug
@@ -222,7 +250,7 @@ abstract class CustomField
     protected function renderDescription(string $fieldId, string $class = ''): void
     {
         if (!empty($this->description)) {
-            echo '<p' .(empty($class) ? '' : ' class="' . $class . '"') . '>' . $this->description . '</p>';
+            echo '<p' . (empty($class) ? '' : ' class="' . $class . '"') . '>' . $this->description . '</p>';
         }
     }
 
