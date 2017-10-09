@@ -16,7 +16,7 @@ Alright, that's all we need. Let's get down to business!
 
 Here you can download a ready-to-use plugin as a starting point for your development. Just download, unzip, move to plugins/ directory and change everything to your needs.
 
-*// LINK TO PLUGIN BOILERPLATE FOLLOWS SOON …*
+&rarr; see this [example plugin on GitHub](https://github.com/Vierbeuter/wp-plugin-sample)
 
 If you want to build your plugin from scratch go on reading to the next chapter.
 
@@ -333,7 +333,7 @@ This is nothing more than a quick overview of what can be done and how does it h
 
 To step deeper into the real plugin development please download the boilerplate and study its sample features.
 
-*// LINK TO PLUGIN BOILERPLATE FOLLOWS SOON …*
+&rarr; see [`vierbeuter/wp-plugin-sample` on GitHub](https://github.com/Vierbeuter/wp-plugin-sample)
 
 ### 7) Translating your plugin
 
