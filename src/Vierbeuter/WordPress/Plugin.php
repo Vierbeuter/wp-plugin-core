@@ -2,6 +2,7 @@
 
 namespace Vierbeuter\WordPress;
 
+use Vierbeuter\WordPress\Di\Component;
 use Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer;
 use Vierbeuter\WordPress\Traits\HasFeatureSupport;
 use Vierbeuter\WordPress\Traits\HasPluginData;
@@ -11,7 +12,7 @@ use Vierbeuter\WordPress\Traits\HasTranslatorService;
  * The Plugin class is supposed to be extended by any class representing a concrete plugin. It provides core
  * functionality for implementing WordPress plugins.
  */
-abstract class Plugin
+abstract class Plugin extends Component
 {
 
     /**
