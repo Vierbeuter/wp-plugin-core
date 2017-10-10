@@ -2,6 +2,8 @@
 
 namespace Vierbeuter\WordPress\Traits;
 
+use Vierbeuter\WordPress\Service\CoreTranslator;
+use Vierbeuter\WordPress\Service\PluginTranslator;
 use Vierbeuter\WordPress\Service\Translator;
 
 /**
@@ -24,10 +26,10 @@ trait HasTranslatorService
         //  add service only once
         if (empty($this->getTranslator())) {
             //  translator for the actual plugin
-            $translator = new Translator($this->getPluginName(), $this->getPluginDir() . 'languages/');
+            $translator = new PluginTranslator($this->getPluginName(), $this->getPluginDir() . 'languages/');
             $this->addComponent('translator', $translator);
             //  translator for the base classes / plugin core
-            $coreTranslator = new Translator('vb-wp-plugin-core', realpath(__DIR__ . '/../../../../languages/'));
+            $coreTranslator = new CoreTranslator();
             $this->addComponent('translator_core', $coreTranslator);
         }
     }
