@@ -3,7 +3,7 @@
 namespace Vierbeuter\WordPress;
 
 use Vierbeuter\WordPress\Di\Component;
-use Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer;
+use Vierbeuter\WordPress\Di\Container;
 use Vierbeuter\WordPress\Traits\HasFeatureSupport;
 use Vierbeuter\WordPress\Traits\HasPluginData;
 use Vierbeuter\WordPress\Traits\HasTranslatorService;
@@ -26,10 +26,6 @@ abstract class Plugin extends Component
      * include properties and methods for retrieving general plugin data
      */
     use HasPluginData;
-    /**
-     * include methods for DI-container support
-     */
-    use HasDependencyInjectionContainer;
     /**
      * include methods for translating texts
      */
@@ -58,6 +54,21 @@ abstract class Plugin extends Component
 
         //  initialize features etc.
         $this->initPlugin();
+    }
+
+    /**
+     * Initializes the DI-container to store any components in such as services.
+     *
+     * @param array $parameters parameters to be stored in the container
+     */
+    private function initDiContainer(array $parameters = []): void
+    {
+        $this->container = new Container();
+
+        //  add parameters to container
+        foreach ($parameters as $paramKey => $paramValue) {
+            $this->addParameter($paramKey, $paramValue);
+        }
     }
 
     /**
