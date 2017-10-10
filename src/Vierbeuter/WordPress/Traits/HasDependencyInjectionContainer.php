@@ -2,8 +2,8 @@
 
 namespace Vierbeuter\WordPress\Traits;
 
-use Pimple\Container;
 use Vierbeuter\WordPress\Di\Component;
+use Vierbeuter\WordPress\Di\Container;
 
 /**
  * The HasDependencyInjectionContainer trait provides methods for accessing a DI-container to store any components in
@@ -15,7 +15,7 @@ trait HasDependencyInjectionContainer
 {
 
     /**
-     * @var \Pimple\Container
+     * @var \Vierbeuter\WordPress\Di\Container
      *
      * container to be used for dependeny injection
      *
@@ -88,7 +88,7 @@ trait HasDependencyInjectionContainer
         //  check given class name
         if (class_exists($className) && is_subclass_of($className, Component::class)) {
             /**
-             * @param \Pimple\Container $c
+             * @param \Vierbeuter\WordPress\Di\Container $c
              *
              * @return \Vierbeuter\WordPress\Di\Component
              */
@@ -128,6 +128,11 @@ trait HasDependencyInjectionContainer
      */
     private function addComponentByInstance(Component $component): void
     {
+        /**
+         * @param \Vierbeuter\WordPress\Di\Container $c
+         *
+         * @return \Vierbeuter\WordPress\Di\Component
+         */
         $this->container[get_class($component)] = function (Container $c) use ($component) {
             //  set container to component
             $component->setContainer($c);

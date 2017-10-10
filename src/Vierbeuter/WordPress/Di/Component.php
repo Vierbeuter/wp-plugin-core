@@ -2,8 +2,6 @@
 
 namespace Vierbeuter\WordPress\Di;
 
-use Pimple\Container;
-
 /**
  * A Component can be nearly anything.
  *
@@ -11,12 +9,14 @@ use Pimple\Container;
  * their own.
  *
  * @package Vierbeuter\WordPress
+ *
+ * @see \Vierbeuter\WordPress\Di\Container
  */
 abstract class Component
 {
 
     /**
-     * @var \Pimple\Container
+     * @var \Vierbeuter\WordPress\Di\Container
      *
      * container to be used for dependeny injection
      *
@@ -27,7 +27,7 @@ abstract class Component
     /**
      * Returns the container.
      *
-     * @return \Pimple\Container
+     * @return \Vierbeuter\WordPress\Di\Container
      */
     public function getContainer(): Container
     {
@@ -37,7 +37,7 @@ abstract class Component
     /**
      * Sets the container.
      *
-     * @param \Pimple\Container $container
+     * @param \Vierbeuter\WordPress\Di\Container $container
      */
     public function setContainer(Container $container)
     {
