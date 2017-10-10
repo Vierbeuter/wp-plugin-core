@@ -1,6 +1,6 @@
 <?php
 
-namespace Vierbeuter\WordPress;
+namespace Vierbeuter\WordPress\Di;
 
 use Pimple\Container;
 

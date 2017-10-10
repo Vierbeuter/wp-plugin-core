@@ -3,7 +3,7 @@
 namespace Vierbeuter\WordPress\Traits;
 
 use Pimple\Container;
-use Vierbeuter\WordPress\Component;
+use Vierbeuter\WordPress\Di\Component;
 
 /**
  * The HasDependencyInjectionContainer trait provides methods for accessing a DI-container to store any components in
@@ -41,12 +41,12 @@ trait HasDependencyInjectionContainer
     /**
      * Adds the given component to the DI-container.
      *
-     * @param \Vierbeuter\WordPress\Component|string $componentOrClassName component or its class name to be added,
+     * @param \Vierbeuter\WordPress\Di\Component|string $componentOrClassName component or its class name to be added,
      *     class has to be a sub-class of Component
      * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
      *     expected to be found in the DI-containter as well, ensure they are added before accessing the given component
      *
-     * @see \Vierbeuter\WordPress\Component
+     * @see \Vierbeuter\WordPress\Di\Component
      */
     protected function addComponent($componentOrClassName, ...$paramNames): void
     {
@@ -80,7 +80,7 @@ trait HasDependencyInjectionContainer
      * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
      *     expected to be found in the DI-containter as well, ensure they are added
      *
-     * @see \Vierbeuter\WordPress\Component
+     * @see \Vierbeuter\WordPress\Di\Component
      * @see https://pimple.symfony.com/#defining-services
      */
     private function addComponentByClassName(string $className, ...$paramNames): void
@@ -90,7 +90,7 @@ trait HasDependencyInjectionContainer
             /**
              * @param \Pimple\Container $c
              *
-             * @return \Vierbeuter\WordPress\Component
+             * @return \Vierbeuter\WordPress\Di\Component
              */
             $this->container[$className] = function (Container $c) use ($className, $paramNames) {
                 //  extract other components and parameters using the DI-container
@@ -104,7 +104,7 @@ trait HasDependencyInjectionContainer
                 }, $paramNames);
 
                 //  instantiate component of given class and pass the parameters
-                /** @var \Vierbeuter\WordPress\Component $component */
+                /** @var \Vierbeuter\WordPress\Di\Component $component */
                 $component = new $className(...$params);
                 //  set container to component
                 $component->setContainer($c);
@@ -121,9 +121,9 @@ trait HasDependencyInjectionContainer
     /**
      * Adds the given component to the DI-container.
      *
-     * @param \Vierbeuter\WordPress\Component $component component to be added
+     * @param \Vierbeuter\WordPress\Di\Component $component component to be added
      *
-     * @see \Vierbeuter\WordPress\Component
+     * @see \Vierbeuter\WordPress\Di\Component
      * @see https://pimple.symfony.com/#defining-services
      */
     private function addComponentByInstance(Component $component): void
@@ -142,7 +142,7 @@ trait HasDependencyInjectionContainer
      *
      * @param string $name
      *
-     * @return null|\Vierbeuter\WordPress\Component
+     * @return null|\Vierbeuter\WordPress\Di\Component
      */
     protected function getComponent(string $name): ?Component
     {
