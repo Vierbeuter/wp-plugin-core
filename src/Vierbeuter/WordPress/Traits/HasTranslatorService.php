@@ -27,10 +27,10 @@ trait HasTranslatorService
         if (empty($this->getTranslator())) {
             //  translator for the actual plugin
             $translator = new PluginTranslator($this->getPluginName(), $this->getPluginDir() . 'languages/');
-            $this->addComponent('translator', $translator);
+            $this->addComponent($translator);
             //  translator for the base classes / plugin core
             $coreTranslator = new CoreTranslator();
-            $this->addComponent('translator_core', $coreTranslator);
+            $this->addComponent($coreTranslator);
         }
     }
 
@@ -44,7 +44,7 @@ trait HasTranslatorService
      */
     private function getTranslator(bool $returnCoreTranslator = false): ?Translator
     {
-        $name = 'translator' . ($returnCoreTranslator ? '_core' : '');
+        $name = $returnCoreTranslator ? CoreTranslator::class : PluginTranslator::class;
 
         return $this->getComponent($name);
     }

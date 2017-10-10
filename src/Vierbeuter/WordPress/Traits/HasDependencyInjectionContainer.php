@@ -15,24 +15,6 @@ trait HasDependencyInjectionContainer
 {
 
     /**
-     * key prefix to be used for components added to the DI-container
-     *
-     * @var string
-     *
-     * @see \Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer::getComponentKey()
-     */
-    private $prefixComponent = 'component_';
-
-    /**
-     * key prefix to be used for parameters added to the DI-container
-     *
-     * @var string
-     *
-     * @see \Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer::getParameterKey()
-     */
-    private $prefixParameter = 'parameter_';
-
-    /**
      * @var \Pimple\Container
      *
      * container to be used for dependeny injection
@@ -59,21 +41,98 @@ trait HasDependencyInjectionContainer
     /**
      * Adds the given component to the DI-container.
      *
-     * @param string $name
-     * @param \Vierbeuter\WordPress\Component $component
+     * @param \Vierbeuter\WordPress\Component|string $componentOrClassName component or its class name to be added,
+     *     class has to be a sub-class of Component
+     * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
+     *     expected to be found in the DI-containter as well, ensure they are added before accessing the given component
      *
+     * @see \Vierbeuter\WordPress\Component
+     */
+    protected function addComponent($componentOrClassName, ...$paramNames): void
+    {
+        //  check given component
+        switch (true) {
+
+            //  component must be non-empty
+            case empty($componentOrClassName):
+                throw new \InvalidArgumentException('First parameter may not be empty.');
+
+            //  given component is a string --> seems to be a class name
+            case is_string($componentOrClassName):
+                $this->addComponentByClassName($componentOrClassName, ...$paramNames);
+                break;
+
+            //  given component is an object of type Component --> just add it
+            case is_object($componentOrClassName) && $componentOrClassName instanceof Component:
+                $this->addComponentByInstance($componentOrClassName);
+                break;
+
+            //  given component is not what it's expected to be --> meh
+            default:
+                throw new \InvalidArgumentException('Expected an instance of a sub-class of Component or its class name and an optional parameter list, but ' . gettype($componentOrClassName) . ' given: "' . $componentOrClassName . '".');
+        }
+    }
+
+    /**
+     * Adds the given component to the DI-container.
+     *
+     * @param string $className class name of component to be added, class has to be a sub-class of Component
+     * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
+     *     expected to be found in the DI-containter as well, ensure they are added
+     *
+     * @see \Vierbeuter\WordPress\Component
      * @see https://pimple.symfony.com/#defining-services
      */
-    protected function addComponent(string $name, Component $component): void
+    private function addComponentByClassName(string $className, ...$paramNames): void
     {
-        $key = $this->getComponentKey($name);
+        //  check given class name
+        if (class_exists($className) && is_subclass_of($className, Component::class)) {
+            /**
+             * @param \Pimple\Container $c
+             *
+             * @return \Vierbeuter\WordPress\Component
+             */
+            $this->container[$className] = function (Container $c) use ($className, $paramNames) {
+                //  extract other components and parameters using the DI-container
+                $params = array_map(function (string $paramName) use ($c, $className) {
+                    if (!isset($c[$paramName])) {
+                        $message = 'Cannot instantiate "' . $className . '", parameter "' . $paramName . '" not found in DI-container.';
+                        throw new \InvalidArgumentException($message);
+                    }
 
-        /**
-         * @param \Pimple\Container $c
-         *
-         * @return \Vierbeuter\WordPress\Component
-         */
-        $this->container[$key] = function (Container $c) use ($component) {
+                    return $c[$paramName];
+                }, $paramNames);
+
+                //  instantiate component of given class and pass the parameters
+                /** @var \Vierbeuter\WordPress\Component $component */
+                $component = new $className(...$params);
+                //  set container to component
+                $component->setContainer($c);
+
+                //  return the component to be stored into container
+                return $component;
+            };
+        } else {
+            $message = 'Cannot instantiate "' . $className . '", the class name is expected to be an existing sub-class of the Component class.';
+            throw new \InvalidArgumentException($message);
+        }
+    }
+
+    /**
+     * Adds the given component to the DI-container.
+     *
+     * @param \Vierbeuter\WordPress\Component $component component to be added
+     *
+     * @see \Vierbeuter\WordPress\Component
+     * @see https://pimple.symfony.com/#defining-services
+     */
+    private function addComponentByInstance(Component $component): void
+    {
+        $this->container[get_class($component)] = function (Container $c) use ($component) {
+            //  set container to component
+            $component->setContainer($c);
+
+            //  return the component to be stored into container
             return $component;
         };
     }
@@ -87,23 +146,7 @@ trait HasDependencyInjectionContainer
      */
     protected function getComponent(string $name): ?Component
     {
-        $key = $this->getComponentKey($name);
-
-        return isset($this->container[$key]) ? $this->container[$key] : null;
-    }
-
-    /**
-     * Returns the container key for given component name.
-     *
-     * @param string $name
-     *
-     * @return string
-     *
-     * @see \Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer::$prefixComponent
-     */
-    private function getComponentKey(string $name): string
-    {
-        return $this->prefixComponent . $name;
+        return isset($this->container[$name]) ? $this->container[$name] : null;
     }
 
     /**
@@ -116,8 +159,7 @@ trait HasDependencyInjectionContainer
      */
     protected function addParameter(string $name, $value): void
     {
-        $key = $this->getParameterKey($name);
-        $this->container[$key] = $value;
+        $this->container[$name] = $value;
     }
 
     /**
@@ -129,22 +171,6 @@ trait HasDependencyInjectionContainer
      */
     protected function getParameter(string $name)
     {
-        $key = $this->getParameterKey($name);
-
-        return isset($this->container[$key]) ? $this->container[$key] : null;
-    }
-
-    /**
-     * Returns the container key for given parameter name.
-     *
-     * @param string $name
-     *
-     * @return string
-     *
-     * @see \Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer::$prefixParameter
-     */
-    private function getParameterKey(string $name): string
-    {
-        return $this->prefixParameter . $name;
+        return isset($this->container[$name]) ? $this->container[$name] : null;
     }
 }
