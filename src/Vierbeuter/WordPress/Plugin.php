@@ -88,6 +88,8 @@ abstract class Plugin extends Component
      */
     public static function activate(Container $container, array $parameters = [])
     {
+        //  TODO: make method non-static
+
         //  only activate a plugin once
         if (empty(static::$plugins[get_called_class()])) {
             //  construct new instance to initialize and activate the plugin
