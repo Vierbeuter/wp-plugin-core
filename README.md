@@ -32,4 +32,4 @@ composer require vierbeuter/wp-plugin-core
 
 ### Implement your custom plugin
 
-*//	COMING SOON*
+To get some help on implementing your own WordPress plugin using the `wp-plugin-core` library have a look into the [implementation guide](./doc/HOW-TO.md).
