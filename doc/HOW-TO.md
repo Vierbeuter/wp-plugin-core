@@ -337,4 +337,100 @@ To step deeper into the real plugin development please download the boilerplate 
 
 ### 7) Translating your plugin
 
-*// TO BE CONTINUED …*
+#### Preamble
+
+WordPress uses [`gettext`](http://php.net/gettext). Translations are usually stored in .po and .mo files. The filenames consist of a `language domain`, an underscore "_", the `locale` and the file extension (.po/.mo).
+
+The WP plugin Core lib requires the language domain to be named exactly the same as the plugin directory.
+
+So, for our previously built plugin **"Your Awesome Plugin"** whose root directory is named `your-awesome-plugin/` the langauge domain has to be `your-awesome-plugin`.
+
+Therefore you should name your language files `your-awesome-plugin_LOCALE.po` and `your-awesome-plugin_LOCALE.mo` where `LOCALE` is something like `en_EN`, `fr_FR`, `de_DE` or even `de_DE_formal` (for `de_DE@formal`) etc.
+
+#### Wanna learn more?
+
+For a general overview of translating WordPress plugins see the [official WP docs](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/).
+
+#### Add translatables
+
+In your plugin class as well as in features, post-types etc. you may use the `$this->translate(…)` method.  
+It is no replacement of WP's `__(…)` function, by the way! But it's a handy helper because you don't have to pass the language domain as you have to do when using `__(…)`.
+
+As an example let's update our `TestFeature` class. Change its `printMessage()` method as follows:
+
+
+```php
+<?php
+
+//  …
+
+class TestFeature extends Feature
+{
+   //  …
+
+    public function printSuccess(): void
+    {
+        //  use $this->translate(…) to make message translatable
+        echo $this->getMessageMarkupSuccess($this->translate('It works!'), true);
+    }
+}
+```
+
+*"Does this really work?"* – Trust me, it works! Or should I say: Es funktioniert! 🤖
+
+#### Add translations
+
+Add a translation file to your `languages/` dir, for now let's add one only for English texts:
+
+```bash
+.
+├── …
+├── your-awesome-plugin/
+│   ├── index.php
+│   ├── languages/
+│   │   └── your-awesome-plugin_en_EN.po  # add this one
+│   │   # add as many other translations with other locales as you need
+│   │   # … and feel free to delete the .gitkeep file
+│   └── src/
+│       └── …
+└── …
+```
+
+*"We're gonna translate English to English?"* – Sir, this is just an example to learn with… 👩‍🏫
+
+##### `your-awesome-plugin_en_EN.po`
+
+Now, open the file and put in the following initial content:
+
+```
+msgid ""
+msgstr ""
+"Project-Id-Version: Your Awesome Plugin\n"
+"POT-Creation-Date: 2017-10-11 14:35+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: You <your@mail-address.com>\n"
+"Language-Team: \n"
+"Language: en_EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../src\n"
+"X-Poedit-KeywordsList: __;_e;_x;_n;translate;vbTranslate\n"
+"X-Generator: Poedit 2.0.1\n"
+"X-Poedit-SearchPath-0: .\n"
+```
+
+Change fields (like the project's name and the last translator) to your needs.
+
+#### Translate
+
+Get the translation tool [Poedit](https://poedit.net/) and open your translation file. Due to missing translations you will then be asked to update them from a POT file or from your PHP sources. Of course, you will click the `Extract from sources` button.  
+Poedit will parse the sources of your plugin and collect all translatable texts for you (which it does by searching all calls of `translate(…)` method or `__(…)` function, see `KeywordList` attribute in above .po file).
+
+On making translations and saving your changes to the .po file a new .mo file will automatically be created. This is what will be loaded by WordPress for determining translated texts.
+
+For more information about how to translate texts using Poedit have a look at the [offical Poedit docs](https://poedit.net/wordpress). Also feel free to study the sources of `wp-plugin-core` or (what I would prefer to do) start debugging (the best way to learn how a library works).
+
+Well, nothing else to say than: **Happy translating.**
