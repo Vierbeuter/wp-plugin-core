@@ -38,13 +38,16 @@ abstract class Plugin extends Component
     /**
      * Plugin constructor.
      *
-     * @param string $pluginFile
+     * @param \Vierbeuter\WordPress\Di\Container $container
      * @param array $parameters
      */
-    private function __construct(string $pluginFile, array $parameters = [])
+    private function __construct(Container $container, array $parameters = [])
     {
+        //  set DI-container to be used for all features and stuff
+        $this->setContainer($container);
+
         //  set plugin file and some other data
-        $this->setPluginFile($pluginFile);
+        $this->setPluginFile($container->getParameter(PluginRegistrar::PARAM_PLUGIN_FILE));
 
         //  initialize service container
         $this->initDiContainer($parameters);
@@ -63,8 +66,6 @@ abstract class Plugin extends Component
      */
     private function initDiContainer(array $parameters = []): void
     {
-        $this->container = new Container();
-
         //  add parameters to container
         foreach ($parameters as $paramKey => $paramValue) {
             $this->addParameter($paramKey, $paramValue);
@@ -79,18 +80,18 @@ abstract class Plugin extends Component
      * \Any\Namespace\YourAwesomePlugin::activate(__FILE__);
      * </code>
      *
-     * @param string $pluginFile absolute path of the WordPress plugin's index.php file.
+     * @param \Vierbeuter\WordPress\Di\Container $container
      * @param array $parameters parameters to be passed to the plugin, e.g. configurations to be accessed on
      *     initializing the plugin features etc.
      *
      * @see \Vierbeuter\WordPress\Autoloader::register()
      */
-    public static function activate(string $pluginFile, array $parameters = [])
+    public static function activate(Container $container, array $parameters = [])
     {
         //  only activate a plugin once
         if (empty(static::$plugins[get_called_class()])) {
             //  construct new instance to initialize and activate the plugin
-            static::$plugins[get_called_class()] = new static($pluginFile, $parameters);
+            static::$plugins[get_called_class()] = new static($container, $parameters);
         }
     }
 
