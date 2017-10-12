@@ -26,12 +26,8 @@ trait HasTranslatorService
     {
         //  add service only once
         if (empty($this->getTranslator())) {
-            //  get plugin-data to grab plugin name and dir from
-            /** @var \Vierbeuter\WordPress\PluginData $pluginData */
-            $pluginData = $this->getComponent(PluginData::class);
-
             //  translator for the actual plugin
-            $translator = new PluginTranslator($pluginData->getPluginName(), $pluginData->getPluginDir() . 'languages/');
+            $translator = new PluginTranslator($this->getComponent(PluginData::class));
             $this->addComponent($translator);
             //  translator for the base classes / plugin core
             $coreTranslator = new CoreTranslator();
