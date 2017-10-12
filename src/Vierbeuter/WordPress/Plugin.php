@@ -5,7 +5,7 @@ namespace Vierbeuter\WordPress;
 use Vierbeuter\WordPress\Di\Component;
 use Vierbeuter\WordPress\Di\Container;
 use Vierbeuter\WordPress\Traits\HasFeatureSupport;
-use Vierbeuter\WordPress\Traits\HasTranslatorService;
+use Vierbeuter\WordPress\Traits\HasTranslatorSupport;
 
 /**
  * The Plugin class is supposed to be extended by any class representing a concrete plugin. It provides core
@@ -24,7 +24,7 @@ abstract class Plugin extends Component
     /**
      * include methods for translating texts
      */
-    use HasTranslatorService;
+    use HasTranslatorSupport;
     /**
      * include methods for working with features
      */
@@ -43,9 +43,6 @@ abstract class Plugin extends Component
 
         //  initialize service container
         $this->initDiContainer($parameters);
-
-        //  initialize services
-        $this->addTranslator();
 
         //  initialize features etc.
         $this->initPlugin();

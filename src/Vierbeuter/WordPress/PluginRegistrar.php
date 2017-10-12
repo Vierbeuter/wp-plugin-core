@@ -3,6 +3,8 @@
 namespace Vierbeuter\WordPress;
 
 use Vierbeuter\WordPress\Di\Container;
+use Vierbeuter\WordPress\Service\CoreTranslator;
+use Vierbeuter\WordPress\Service\PluginTranslator;
 
 /**
  * The PluginRegistrar registers and activates WordPress plugins built upon `wp-plugin-core` library.
@@ -70,11 +72,27 @@ class PluginRegistrar
         }
 
         //  add components to DI-container
-        $this->container->addComponent(PluginData::class, static::PARAM_PLUGIN_FILE);
+        $this->addComponents($className);
 
         //  TODO: replace static method call with DI and call of non-static activate()-method
 
         /** @see \Vierbeuter\WordPress\Plugin::activate() */
         $className::activate($this->container, $parameters);
+    }
+
+    /**
+     * Adds all must-have components of the plugin to the DI-container like the plugin-data and the translators.
+     *
+     * @param string $pluginClassName
+     */
+    protected function addComponents(string $pluginClassName)
+    {
+        //  add plugin-data
+        $this->container->addComponent(PluginData::class, static::PARAM_PLUGIN_FILE);
+
+        //  add translator for the actual plugin
+        $this->container->addComponent(PluginTranslator::class, PluginData::class);
+        //  add translator for the base classes / plugin core
+        $this->container->addComponent(CoreTranslator::class);
     }
 }
