@@ -71,8 +71,9 @@ class PluginRegistrar
             throw new \InvalidArgumentException('Invalid class name given: "' . $className . '". Please provide the name (including namespace) of an existing sub-class of "' . Plugin::class . '".');
         }
 
-        //  add components to DI-container
+        //  add components and parameters to DI-container
         $this->addComponents($className);
+        $this->addParameters($parameters);
 
         //  TODO: replace static method call with DI and call of non-static activate()-method
 
@@ -94,5 +95,18 @@ class PluginRegistrar
         $this->container->addComponent(PluginTranslator::class, PluginData::class);
         //  add translator for the base classes / plugin core
         $this->container->addComponent(CoreTranslator::class);
+    }
+
+    /**
+     * Initializes the DI-container to store any components in such as services.
+     *
+     * @param array $parameters parameters to be stored in the container
+     */
+    protected function addParameters(array $parameters = []): void
+    {
+        //  add parameters to container
+        foreach ($parameters as $paramKey => $paramValue) {
+            $this->container->addParameter($paramKey, $paramValue);
+        }
     }
 }

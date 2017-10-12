@@ -34,31 +34,14 @@ abstract class Plugin extends Component
      * Plugin constructor.
      *
      * @param \Vierbeuter\WordPress\Di\Container $container
-     * @param array $parameters
      */
-    private function __construct(Container $container, array $parameters = [])
+    private function __construct(Container $container)
     {
         //  set DI-container to be used for all features and stuff
         $this->setContainer($container);
 
-        //  initialize service container
-        $this->initDiContainer($parameters);
-
         //  initialize features etc.
         $this->initPlugin();
-    }
-
-    /**
-     * Initializes the DI-container to store any components in such as services.
-     *
-     * @param array $parameters parameters to be stored in the container
-     */
-    private function initDiContainer(array $parameters = []): void
-    {
-        //  add parameters to container
-        foreach ($parameters as $paramKey => $paramValue) {
-            $this->addParameter($paramKey, $paramValue);
-        }
     }
 
     /**
@@ -70,19 +53,17 @@ abstract class Plugin extends Component
      * </code>
      *
      * @param \Vierbeuter\WordPress\Di\Container $container
-     * @param array $parameters parameters to be passed to the plugin, e.g. configurations to be accessed on
-     *     initializing the plugin features etc.
      *
      * @see \Vierbeuter\WordPress\Autoloader::register()
      */
-    public static function activate(Container $container, array $parameters = [])
+    public static function activate(Container $container)
     {
         //  TODO: make method non-static
 
         //  only activate a plugin once
         if (empty(static::$plugins[get_called_class()])) {
             //  construct new instance to initialize and activate the plugin
-            static::$plugins[get_called_class()] = new static($container, $parameters);
+            static::$plugins[get_called_class()] = new static($container);
         }
     }
 
