@@ -2,7 +2,7 @@
 
 namespace Vierbeuter\WordPress\Feature;
 
-use Vierbeuter\WordPress\Component;
+use Vierbeuter\WordPress\Di\Component;
 use Vierbeuter\WordPress\Feature\Traits\HasAdminNoticeSupport;
 use Vierbeuter\WordPress\Feature\Traits\HasTranslator;
 use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;

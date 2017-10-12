@@ -2,7 +2,7 @@
 
 namespace Vierbeuter\WordPress\Service;
 
-use Vierbeuter\WordPress\Component;
+use Vierbeuter\WordPress\Di\Component;
 
 /**
  * A Service provides methods for several tasks.
