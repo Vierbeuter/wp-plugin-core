@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.4.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.4.0) (2017-10-12)
+### Added
+ * developer guide for implementing a plugin &rarr; see [HOW-TO](./doc/HOW-TO.md)
+
+### Changed
+ * plugin makes now more use of dependency injection to better handle features and other components a plugin is dependant on
+ * therefore improved a plugin's bootstrapping process (due to better DI-integration)
+
 ## [0.3.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.3.0) (2017-10-09)
 ### Added
  * custom-field support for taxonomies (similar to custom-fields for post-types) 
