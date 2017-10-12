@@ -34,6 +34,11 @@ class PluginRegistrar
     protected $container;
 
     /**
+     * @var \Vierbeuter\WordPress\Plugin
+     */
+    protected $plugin;
+
+    /**
      * PluginRegistrar constructor.
      */
     public function __construct()
@@ -62,10 +67,20 @@ class PluginRegistrar
      * @param array $parameters parameters to be passed to the plugin, e.g. configurations to be accessed on
      *     initializing the plugin features etc.
      *
+     * @throws \Exception if a plugin has already been activated by this registrar
+     *
      * @see \Vierbeuter\WordPress\Plugin
      */
     public function activate(string $className, array $parameters = []): void
     {
+        //  ensure to activate plugin only once because this class is designed to register and activate only one
+        //  plugin at a time … otherwise two plugins might share the same DI-container which would be followed by
+        //  several problems (there's only one plugin-file parameter, the same translator would have to handle
+        //  different domains)
+        if (!empty($this->plugin)) {
+            throw new \Exception('Please create a new PluginRegistrar to activate the plugin "' . $className . '".');
+        }
+
         //  check given class name to ensure it exists and it's a sub-class of Plugin
         if (empty($className) || !class_exists($className) || !is_subclass_of($className, Plugin::class)) {
             throw new \InvalidArgumentException('Invalid class name given: "' . $className . '". Please provide the name (including namespace) of an existing sub-class of "' . Plugin::class . '".');
@@ -75,19 +90,40 @@ class PluginRegistrar
         $this->addComponents($className);
         $this->addParameters($parameters);
 
-        //  TODO: replace static method call with DI and call of non-static activate()-method
-
-        /** @see \Vierbeuter\WordPress\Plugin::activate() */
-        $className::activate($this->container, $parameters);
+        //  get the plugin and keep it in mind for accessing it later on
+        $this->plugin = $this->container->getComponent($className);
+        //  initialize the plugin's features etc.
+        $this->plugin->initPlugin();
     }
 
     /**
-     * Adds all must-have components of the plugin to the DI-container like the plugin-data and the translators.
+     * Returns the plugin.
+     *
+     * @return \Vierbeuter\WordPress\Plugin
+     *
+     * @throws \Exception if no valid plugin has been activated yet using this registrar's activate(…) method
+     *
+     * @see \Vierbeuter\WordPress\PluginRegistrar::activate()
+     */
+    public function getPlugin(): Plugin
+    {
+        if (empty($this->plugin)) {
+            throw new \Exception('No plugin found. Please invoke activate() method first.');
+        }
+
+        return $this->plugin;
+    }
+
+    /**
+     * Adds all must-have components of the plugin to the DI-container like the plugin itself, the plugin-data, the
+     * translators and so on.
      *
      * @param string $pluginClassName
      */
     protected function addComponents(string $pluginClassName)
     {
+        //  add class name of actual plugin
+        $this->container->addComponent($pluginClassName);
         //  add plugin-data
         $this->container->addComponent(PluginData::class, static::PARAM_PLUGIN_FILE);
 
