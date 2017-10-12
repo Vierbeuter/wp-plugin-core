@@ -66,7 +66,7 @@ abstract class CustomField
     public function vbTranslate(string $text): string
     {
         //  TODO: use translator!
-        return $text;
+        return __($text, 'vb-wp-plugin-core');
     }
 
     /**

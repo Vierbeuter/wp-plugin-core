@@ -7,7 +7,7 @@ namespace Vierbeuter\WordPress\Service;
  *
  * @package Vierbeuter\WordPress\Service
  */
-class Translator extends Service
+abstract class Translator extends Service
 {
 
     /**

@@ -2,35 +2,17 @@
 
 namespace Vierbeuter\WordPress\Traits;
 
+use Vierbeuter\WordPress\Service\CoreTranslator;
+use Vierbeuter\WordPress\Service\PluginTranslator;
 use Vierbeuter\WordPress\Service\Translator;
 
 /**
- * The HasTranslatorService trait adds methods for translating texts.
- *
- * It's required to be used in combination with HasDependencyInjectionContainer trait.
+ * The HasTranslatorSupport trait adds methods for translating texts.
  *
  * @package Vierbeuter\WordPress\Traits
- *
- * @see \Vierbeuter\WordPress\Traits\HasDependencyInjectionContainer
  */
-trait HasTranslatorService
+trait HasTranslatorSupport
 {
-
-    /**
-     * Adds the translator service to the DI-container (only once).
-     */
-    private function addTranslator(): void
-    {
-        //  add service only once
-        if (empty($this->getTranslator())) {
-            //  translator for the actual plugin
-            $translator = new Translator($this->getPluginName(), $this->getPluginDir() . 'languages/');
-            $this->addComponent('translator', $translator);
-            //  translator for the base classes / plugin core
-            $coreTranslator = new Translator('vb-wp-plugin-core', realpath(__DIR__ . '/../../../../languages/'));
-            $this->addComponent('translator_core', $coreTranslator);
-        }
-    }
 
     /**
      * Returns the translator service.
@@ -42,7 +24,7 @@ trait HasTranslatorService
      */
     private function getTranslator(bool $returnCoreTranslator = false): ?Translator
     {
-        $name = 'translator' . ($returnCoreTranslator ? '_core' : '');
+        $name = $returnCoreTranslator ? CoreTranslator::class : PluginTranslator::class;
 
         return $this->getComponent($name);
     }

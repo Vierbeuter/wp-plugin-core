@@ -1,13 +1,15 @@
 <?php
 
-namespace Vierbeuter\WordPress\Traits;
+namespace Vierbeuter\WordPress;
+
+use Vierbeuter\WordPress\Di\Component;
 
 /**
- * The HasPluginData trait provides properties and methods describing the plugin.
+ * The PluginData class provides properties and methods describing the plugin.
  *
  * @package Vierbeuter\WordPress\Traits
  */
-trait HasPluginData
+class PluginData extends Component
 {
 
     /**
@@ -17,7 +19,7 @@ trait HasPluginData
      *
      * @var string
      */
-    private $pluginFile;
+    protected $pluginFile;
 
     /**
      * complete server path to the plugin including trailing slash
@@ -26,7 +28,7 @@ trait HasPluginData
      *
      * @var string
      */
-    private $pluginDir;
+    protected $pluginDir;
 
     /**
      * complete (web) URL to the plugin directory including trailing slash
@@ -35,7 +37,7 @@ trait HasPluginData
      *
      * @var string
      */
-    private $pluginUrl;
+    protected $pluginUrl;
 
     /**
      * plugin name (name of the directory containing the plugin's index.php file)
@@ -44,7 +46,7 @@ trait HasPluginData
      *
      * @var string
      */
-    private $pluginName;
+    protected $pluginName;
 
     /**
      * plugin slug as used by WordPress to identify plugins, e.g. for storing "active_plugins" in "wp_options" table
@@ -54,14 +56,24 @@ trait HasPluginData
      *
      * @var string
      */
-    private $pluginSlug;
+    protected $pluginSlug;
+
+    /**
+     * PluginData constructor.
+     *
+     * @param string $pluginFile
+     */
+    public function __construct(string $pluginFile)
+    {
+        $this->setPluginFile($pluginFile);
+    }
 
     /**
      * Sets the pluginFile as well as some other properties which rely on the given file path.
      *
      * @param string $pluginFile
      */
-    private function setPluginFile(string $pluginFile): void
+    protected function setPluginFile(string $pluginFile): void
     {
         $this->pluginFile = $pluginFile;
 

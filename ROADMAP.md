@@ -7,7 +7,9 @@
  * ~~feature for adding custom taxonomies~~ (added to 0.1.0)
  * ~~add [translations](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/) for core~~ (added to 0.2.0)
  * ~~ensure a plugin dev is able to translate his/her plugin as well~~ (added to 0.2.0)
- * docs! … add a (simple) how-to or guide
+ * ~~docs! … add a (simple) how-to or guide~~(added to 0.4.0)
+ * some last optimizations and todos for custom taxonomies and fields
+ * maybe add some additional features or base classes for feature implementations … maybe
 
 ## 1.1.0
 
