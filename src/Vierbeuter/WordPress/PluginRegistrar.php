@@ -69,6 +69,9 @@ class PluginRegistrar
             throw new \InvalidArgumentException('Invalid class name given: "' . $className . '". Please provide the name (including namespace) of an existing sub-class of "' . Plugin::class . '".');
         }
 
+        //  add components to DI-container
+        $this->container->addComponent(PluginData::class, static::PARAM_PLUGIN_FILE);
+
         //  TODO: replace static method call with DI and call of non-static activate()-method
 
         /** @see \Vierbeuter\WordPress\Plugin::activate() */

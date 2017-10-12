@@ -5,7 +5,6 @@ namespace Vierbeuter\WordPress;
 use Vierbeuter\WordPress\Di\Component;
 use Vierbeuter\WordPress\Di\Container;
 use Vierbeuter\WordPress\Traits\HasFeatureSupport;
-use Vierbeuter\WordPress\Traits\HasPluginData;
 use Vierbeuter\WordPress\Traits\HasTranslatorService;
 
 /**
@@ -22,10 +21,6 @@ abstract class Plugin extends Component
      */
     protected static $plugins;
 
-    /**
-     * include properties and methods for retrieving general plugin data
-     */
-    use HasPluginData;
     /**
      * include methods for translating texts
      */
@@ -45,9 +40,6 @@ abstract class Plugin extends Component
     {
         //  set DI-container to be used for all features and stuff
         $this->setContainer($container);
-
-        //  set plugin file and some other data
-        $this->setPluginFile($container->getParameter(PluginRegistrar::PARAM_PLUGIN_FILE));
 
         //  initialize service container
         $this->initDiContainer($parameters);
