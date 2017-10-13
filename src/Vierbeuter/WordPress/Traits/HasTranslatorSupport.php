@@ -22,7 +22,7 @@ trait HasTranslatorSupport
      *
      * @return null|\Vierbeuter\WordPress\Service\Translator
      */
-    private function getTranslator(bool $returnCoreTranslator = false): ?Translator
+    protected function getTranslator(bool $returnCoreTranslator = false): ?Translator
     {
         $name = $returnCoreTranslator ? CoreTranslator::class : PluginTranslator::class;
 
@@ -32,7 +32,7 @@ trait HasTranslatorSupport
     /**
      * Translates the given text.
      *
-     * @param string $text
+     * @param string $text the text to be translated
      * @param bool $useCoreTranslator determines if the translator component for the plugin core has to be used;
      *     defaults to FALSE to use the translator component of the actual plugin
      *
