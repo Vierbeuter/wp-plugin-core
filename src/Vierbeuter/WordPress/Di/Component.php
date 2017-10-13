@@ -47,16 +47,15 @@ abstract class Component
     /**
      * Adds the given component to the DI-container.
      *
-     * @param \Vierbeuter\WordPress\Di\Component|string $componentOrClassName component or its class name to be added,
-     *     class has to be a sub-class of Component
+     * @param string $componentClass class name of component to be added, the class has to be a sub-class of Component
      * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
      *     expected to be found in the DI-containter as well, ensure they are added before accessing the given component
      *
      * @see \Vierbeuter\WordPress\Di\Component
      */
-    public function addComponent($componentOrClassName, ...$paramNames): void
+    public function addComponent(string $componentClass, ...$paramNames): void
     {
-        $this->container->addComponent($componentOrClassName, ...$paramNames);
+        $this->container->addComponent($componentClass, ...$paramNames);
     }
 
     /**

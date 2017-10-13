@@ -35,9 +35,29 @@ abstract class AddCustomPostTypes extends Feature
     public function activate(): void
     {
         //  first of all get the post-types to be registered from sub-class
-        foreach ($this->initPostTypes() as $postType) {
-            //  pass translators to post-type (for translating labels and buttons and such stuff)
-            $postType->setTranslators($this->getTranslator(), $this->getVbTranslator());
+        foreach ($this->getPostTypeClasses() as $postTypeClass) {
+            //  given class must not be empty
+            if (empty($postTypeClass)) {
+                throw new \Exception('Given post-type class is empty. Please check implementation of ' . get_called_class() . '->getPostTypeClasses() method.');
+            }
+
+            //  if array given then first entry is the post-type class, the rest are parameter names for this post-type
+            if (is_array($postTypeClass)) {
+                $paramNames = $postTypeClass;
+                $postTypeClass = array_shift($paramNames);
+            }
+
+            //  check post-type for extending the correct base class
+            if (!is_string($postTypeClass) || !is_subclass_of($postTypeClass, CustomPostType::class)) {
+                throw new \Exception('Invalid class "' . $postTypeClass . '" given, needs to be a sub-class of "' . CustomPostType::class . '". Also check implementation of ' . get_called_class() . '->getPostTypeClasses() method.');
+            }
+
+            //  add class to DI-container
+            $this->addComponent($postTypeClass, ...(empty($paramNames) ? [] : $paramNames));
+            //  get post-type instance via DI
+            /** @var \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType $postType */
+            $postType = $this->getComponent($postTypeClass);
+
             //  activate the post-type
             $postType->activate();
             //  keep in mind the current post-type using its slug as key
@@ -49,11 +69,15 @@ abstract class AddCustomPostTypes extends Feature
     }
 
     /**
-     * Returns the list of post-types to be registered.
+     * Returns a list of post-type class names. Each post-type class has to be a sub-class of CustomPostType, will be
+     * checked on feature activation.
      *
-     * @return CustomPostType[]
+     * @return string[]
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType
+     * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::activate()
      */
-    abstract protected function initPostTypes(): array;
+    abstract protected function getPostTypeClasses(): array;
 
     /**
      * Returns the list of registered post-types.
@@ -152,6 +176,7 @@ abstract class AddCustomPostTypes extends Feature
         //  iterate all post-types
         foreach ($this->getPostTypes() as $postType) {
             //  register each post-type
+            /** @see https://codex.wordpress.org/Function_Reference/register_post_type */
             register_post_type($postType->getSlug(), $postType->getOptions());
         }
     }

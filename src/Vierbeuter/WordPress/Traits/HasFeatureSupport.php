@@ -19,21 +19,28 @@ trait HasFeatureSupport
     /**
      * Adds the given feature to the plugin and enables it.
      *
-     * @param \Vierbeuter\WordPress\Feature\Feature $feature
+     * @param string $featureClass the feature's class name to be added, the class has to be a sub-class of Feature
+     * @param array $paramNames names of parameters to be passed to the feature's constructor, the parameters are
+     *     expected to be found in the DI-containter as well, ensure they are added before accessing the given feature
      *
      * @throws \Exception
+     *
+     * @see \Vierbeuter\WordPress\Feature\Feature
      */
-    protected function addFeature(Feature $feature): void
+    protected function addFeature(string $featureClass, ...$paramNames): void
     {
-        //  add feature only once
-        if (empty($this->getFeature(get_class($feature)))) {
-            //  add translator to feature
-            $feature->setTranslator($this->getTranslator());
-            //  add core translator to feature
-            $feature->setVbTranslator($this->getTranslator(true));
+        //  check feature class first
+        if (empty($featureClass) || !is_subclass_of($featureClass, Feature::class)) {
+            throw new \InvalidArgumentException('Given class "' . $featureClass . '" needs to be a valid sub-class of "' . Feature::class . '"');
+        }
 
+        //  add feature only once
+        if (empty($this->getFeature($featureClass))) {
             //  add to DI-container
-            $this->addComponent(get_class($feature), $feature);
+            $this->addComponent($featureClass, ...$paramNames);
+            //  instantiate by getting the feature from container
+            /** @var \Vierbeuter\WordPress\Feature\Feature $feature */
+            $feature = $this->getComponent($featureClass);
 
             //  activate feature
             $feature->activate();
