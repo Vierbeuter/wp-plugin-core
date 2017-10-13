@@ -20,62 +20,32 @@ class Container extends Pimple_Container
     /**
      * Adds the given component to the DI-container.
      *
-     * @param \Vierbeuter\WordPress\Di\Component|string $componentOrClassName component or its class name to be added,
-     *     class has to be a sub-class of Component
+     * @param string $componentClass class name of component to be added, the class has to be a sub-class of Component
      * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
      *     expected to be found in the DI-containter as well, ensure they are added before accessing the given component
      *
      * @see \Vierbeuter\WordPress\Di\Component
-     */
-    public function addComponent($componentOrClassName, ...$paramNames): void
-    {
-        //  check given component
-        switch (true) {
-
-            //  component must be non-empty
-            case empty($componentOrClassName):
-                throw new \InvalidArgumentException('First parameter may not be empty.');
-
-            //  given component is a string --> seems to be a class name
-            case is_string($componentOrClassName):
-                $this->addComponentByClassName($componentOrClassName, ...$paramNames);
-                break;
-
-            //  given component is an object of type Component --> just add it
-            case is_object($componentOrClassName) && $componentOrClassName instanceof Component:
-                $this->addComponentByInstance($componentOrClassName);
-                break;
-
-            //  given component is not what it's expected to be --> meh
-            default:
-                throw new \InvalidArgumentException('Expected an instance of a sub-class of Component or its class name and an optional parameter list, but ' . gettype($componentOrClassName) . ' given: "' . $componentOrClassName . '".');
-        }
-    }
-
-    /**
-     * Adds the given component to the DI-container.
-     *
-     * @param string $className class name of component to be added, class has to be a sub-class of Component
-     * @param array $paramNames names of parameters to be passed to the component's constructor, the parameters are
-     *     expected to be found in the DI-containter as well, ensure they are added
-     *
-     * @see \Vierbeuter\WordPress\Di\Component
      * @see https://pimple.symfony.com/#defining-services
      */
-    protected function addComponentByClassName(string $className, ...$paramNames): void
+    public function addComponent(string $componentClass, ...$paramNames): void
     {
+        //  component class must be non-empty
+        if (empty($componentClass)) {
+            throw new \InvalidArgumentException('First parameter may not be empty.');
+        }
+
         //  check given class name
-        if (class_exists($className) && is_subclass_of($className, Component::class)) {
+        if (class_exists($componentClass) && is_subclass_of($componentClass, Component::class)) {
             /**
              * @param \Vierbeuter\WordPress\Di\Container $c
              *
              * @return \Vierbeuter\WordPress\Di\Component
              */
-            $this[$className] = function (Container $c) use ($className, $paramNames) {
+            $this[$componentClass] = function (Container $c) use ($componentClass, $paramNames) {
                 //  extract other components and parameters using the DI-container
-                $params = array_map(function (string $paramName) use ($c, $className) {
+                $params = array_map(function (string $paramName) use ($c, $componentClass) {
                     if (!isset($c[$paramName])) {
-                        $message = 'Cannot instantiate "' . $className . '", parameter "' . $paramName . '" not found in DI-container.';
+                        $message = 'Cannot instantiate "' . $componentClass . '", parameter "' . $paramName . '" not found in DI-container.';
                         throw new \InvalidArgumentException($message);
                     }
 
@@ -84,7 +54,7 @@ class Container extends Pimple_Container
 
                 //  instantiate component of given class and pass the parameters
                 /** @var \Vierbeuter\WordPress\Di\Component $component */
-                $component = new $className(...$params);
+                $component = new $componentClass(...$params);
                 //  set container to component
                 $component->setContainer($c);
 
@@ -92,33 +62,9 @@ class Container extends Pimple_Container
                 return $component;
             };
         } else {
-            $message = 'Cannot instantiate "' . $className . '", the class name is expected to be an existing sub-class of the Component class.';
+            $message = 'Cannot instantiate "' . $componentClass . '", the class name is expected to be an existing sub-class of the Component class.';
             throw new \InvalidArgumentException($message);
         }
-    }
-
-    /**
-     * Adds the given component to the DI-container.
-     *
-     * @param \Vierbeuter\WordPress\Di\Component $component component to be added
-     *
-     * @see \Vierbeuter\WordPress\Di\Component
-     * @see https://pimple.symfony.com/#defining-services
-     */
-    protected function addComponentByInstance(Component $component): void
-    {
-        /**
-         * @param \Vierbeuter\WordPress\Di\Container $c
-         *
-         * @return \Vierbeuter\WordPress\Di\Component
-         */
-        $this[get_class($component)] = function (Container $c) use ($component) {
-            //  set container to component
-            $component->setContainer($c);
-
-            //  return the component to be stored into container
-            return $component;
-        };
     }
 
     /**
