@@ -19,7 +19,7 @@ trait HasFeatureSupport
     /**
      * Adds the given feature to the plugin and enables it.
      *
-     * @param string $featureClass the feature's class name of the feature, has to be a sub-class of Feature
+     * @param string $featureClass the feature's class name to be added, the class has to be a sub-class of Feature
      * @param array $paramNames names of parameters to be passed to the feature's constructor, the parameters are
      *     expected to be found in the DI-containter as well, ensure they are added before accessing the given feature
      *
