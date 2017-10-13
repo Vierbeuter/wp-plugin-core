@@ -37,7 +37,7 @@ abstract class AddCustomTaxonomies extends Feature
         //  first of all get the taxonomies to be registered from sub-class
         foreach ($this->initTaxonomies() as $taxonomy) {
             //  pass translators to taxonomy (for translating labels and buttons and such stuff)
-            $taxonomy->setTranslators($this->getTranslator(), $this->getVbTranslator());
+            $taxonomy->setTranslators($this->getTranslator(), $this->getTranslator(true));
             //  activate the taxonomy
             $taxonomy->activate();
             //  keep in mind the current taxonomy using its slug as key
