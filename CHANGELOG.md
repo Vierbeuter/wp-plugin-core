@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.5.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.5.0) (2017-10-13)
+### Changed
+ * refactorings of post-types and taxonomies and a few changes of feature base class for improving DI-integration
+
 ## [0.4.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.4.0) (2017-10-12)
 ### Added
  * developer guide for implementing a plugin &rarr; see [HOW-TO](./doc/HOW-TO.md)
