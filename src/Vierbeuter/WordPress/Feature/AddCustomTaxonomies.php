@@ -35,9 +35,29 @@ abstract class AddCustomTaxonomies extends Feature
     public function activate(): void
     {
         //  first of all get the taxonomies to be registered from sub-class
-        foreach ($this->initTaxonomies() as $taxonomy) {
-            //  pass translators to taxonomy (for translating labels and buttons and such stuff)
-            $taxonomy->setTranslators($this->getTranslator(), $this->getTranslator(true));
+        foreach ($this->getTaxonomyClasses() as $taxonomyClass) {
+            //  given class must not be empty
+            if (empty($taxonomyClass)) {
+                throw new \Exception('Given taxonomy class is empty. Please check implementation of ' . get_called_class() . '->getTaxonomyClasses() method.');
+            }
+
+            //  if array given then first entry is the taxonomy class, the rest are parameter names for this taxonomy
+            if (is_array($taxonomyClass)) {
+                $paramNames = $taxonomyClass;
+                $taxonomyClass = array_shift($paramNames);
+            }
+
+            //  check taxonomy for extending the correct base class
+            if (!is_string($taxonomyClass) || !is_subclass_of($taxonomyClass, CustomTaxonomy::class)) {
+                throw new \Exception('Invalid class "' . $taxonomyClass . '" given, needs to be a sub-class of "' . CustomTaxonomy::class . '". Also check implementation of ' . get_called_class() . '->getTaxonomyClasses() method.');
+            }
+
+            //  add class to DI-container
+            $this->addComponent($taxonomyClass, ...(empty($paramNames) ? [] : $paramNames));
+            //  get taxonomy instance via DI
+            /** @var \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy $taxonomy */
+            $taxonomy = $this->getComponent($taxonomyClass);
+
             //  activate the taxonomy
             $taxonomy->activate();
             //  keep in mind the current taxonomy using its slug as key
@@ -49,11 +69,15 @@ abstract class AddCustomTaxonomies extends Feature
     }
 
     /**
-     * Returns the list of taxonomies to be registered.
+     * Returns a list of taxonomy class names. Each taxonomy class has to be a sub-class of CustomTaxonomy, will be
+     * checked on feature activation.
      *
-     * @return CustomTaxonomy[]
+     * @return string[]
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomTaxonomy\CustomTaxonomy
+     * @see \Vierbeuter\WordPress\Feature\AddCustomTaxonomies::activate()
      */
-    abstract protected function initTaxonomies(): array;
+    abstract protected function getTaxonomyClasses(): array;
 
     /**
      * Returns the list of registered taxonomies.
