@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.6.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.6.1) (2017-10-16)
+### Fixed
+ * fixed bug for post-types' and taxonomies' WP hook support
+
 ## [0.6.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.6.0) (2017-10-16)
 ### Added
  * WP hook support for post-types, taxonomies and custom fields
