@@ -18,7 +18,7 @@ trait HasWpHookSupport
      * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getActionHooks()
      * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getFilterHooks()
      */
-    private function initWpHooks(): void
+    public function initWpHooks(): void
     {
         //  iterate the list of action-hooks as defined in sub-class
         foreach ($this->getActionHooks() as $hookName => $hookInfo) {
