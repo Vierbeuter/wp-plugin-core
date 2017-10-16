@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.6.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.6.0) (2017-10-16)
+### Added
+ * WP hook support for post-types, taxonomies and custom fields
+ * custom fields got a default implementation of the new `enqueueScripts()` method (hooking into `admin_enqueue_scripts`) &rarr; the method can be overridden if a field needs additional scripts to be loaded in wp-admin panel (e.g. jQuery UI elements)
+
 ## [0.5.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.5.0) (2017-10-13)
 ### Changed
  * refactorings of post-types and taxonomies and a few changes of feature base class for improving DI-integration
