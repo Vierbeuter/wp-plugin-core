@@ -288,4 +288,39 @@ abstract class CustomField
     {
         return true;
     }
+
+    /**
+     * Returns a list of actions to be hooked into by this class. For each hook there <strong>must</strong> be defined a
+     * public method with the same name as the hook (unless the hook's name consists of hyphens "-", for the appropriate
+     * method name underscores "_" have to be used).
+     *
+     * Valid entries of the returned array are single strings, key-value-pairs and arrays. See comments in the method's
+     * default implementation.
+     *
+     * @return string[]|array
+     */
+    protected function getActionHooks(): array
+    {
+        return [
+            /** @see \Vierbeuter\WordPress\Feature\CustomField\CustomField::enqueueScripts() */
+            'admin_enqueue_scripts' => 'enqueueScripts',
+        ];
+    }
+
+    /**
+     * Hooks into `admin_enqueue_scripts` and loads additional JS and CSS ressources for WP-admin panel.
+     *
+     * Use WordPress functions `wp_enqueue_script(…)` and `wp_enqueue_style(…)` to add assets.
+     * As needed don't hesitate to check current page with `get_current_screen()` function for adding several scripts
+     * only on specific pages of WP's admin panel.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/admin_enqueue_scripts/
+     * @see https://developer.wordpress.org/reference/functions/wp_enqueue_script/
+     * @see https://developer.wordpress.org/reference/functions/wp_enqueue_style/
+     * @see https://developer.wordpress.org/reference/functions/get_current_screen/
+     */
+    public function enqueueScripts()
+    {
+        //  may be overridden
+    }
 }
