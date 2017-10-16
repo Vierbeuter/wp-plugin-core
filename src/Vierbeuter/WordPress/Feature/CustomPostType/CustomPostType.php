@@ -3,6 +3,7 @@
 namespace Vierbeuter\WordPress\Feature\CustomPostType;
 
 use Vierbeuter\WordPress\Di\Component;
+use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
 use Vierbeuter\WordPress\Traits\HasTranslatorSupport;
 
 /**
@@ -40,6 +41,10 @@ abstract class CustomPostType extends Component
      * include methods for translating texts
      */
     use HasTranslatorSupport;
+    /**
+     * include methods for being able to provide WP-hook implementations
+     */
+    use HasWpHookSupport;
 
     /**
      * Activates the post-type.
@@ -50,6 +55,14 @@ abstract class CustomPostType extends Component
     {
         //  apply options (merge default values with array from sub-class)
         $this->options = array_merge($this->getDefaultOptions(), $this->getPostTypeOptions());
+        //  register implementations of WP-hooks
+        $this->initWpHooks();
+
+        //  let all fields register their WP-hook implementations
+        foreach ($this->getFieldGroups() as $fieldGroup) {
+            foreach ($fieldGroup->getFields() as $field)
+            $field->initWpHooks();
+        }
     }
 
     /**

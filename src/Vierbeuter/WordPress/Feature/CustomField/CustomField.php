@@ -2,6 +2,8 @@
 
 namespace Vierbeuter\WordPress\Feature\CustomField;
 
+use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
+
 /**
  * Custom-field for a custom post-type.
  *
@@ -26,6 +28,11 @@ abstract class CustomField
      * @var string|null
      */
     protected $description;
+
+    /**
+     * include methods for being able to provide WP-hook implementations
+     */
+    use HasWpHookSupport;
 
     /**
      * CustomField constructor.
