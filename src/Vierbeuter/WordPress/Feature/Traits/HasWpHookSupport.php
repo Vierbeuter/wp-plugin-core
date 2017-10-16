@@ -15,8 +15,8 @@ trait HasWpHookSupport
      *
      * Override getActionHooks() and getFilterHooks() methods to define these hooks.
      *
-     * @see \Vierbeuter\WordPress\Feature\Feature::getActionHooks()
-     * @see \Vierbeuter\WordPress\Feature\Feature::getFilterHooks()
+     * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getActionHooks()
+     * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getFilterHooks()
      */
     private function initWpHooks(): void
     {
