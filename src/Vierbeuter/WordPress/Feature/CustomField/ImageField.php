@@ -58,7 +58,7 @@ class ImageField extends CustomField
         }
         //  else it's already an image-URL
 
-        echo '<img id="' . $previewId . '" src="' . $image . '" style="max-width: 500px; max-height: 150px; display: none;" alt="kein Bild" /><div style="display: block;"></div>';
+        echo '<img id="' . $previewId . '" src="' . $image . '" style="max-width: 500px; max-height: 150px; display: none;" alt="' . $this->vbTranslate('no image') . '" /><div style="display: block;"></div>';
         echo '<input type="text" id="' . $fieldId . '" name="' . $fieldId . '" value="' . ($this->useAttachmentId ? $value : $image) . '" />';
         echo '<input id="' . $buttonId . '" class="button" type="button" value="' . $this->vbTranslate('Media library / Upload image') . '" />';
     }
