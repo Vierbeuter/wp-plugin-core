@@ -237,7 +237,7 @@ abstract class CustomPostType extends Component
      * <code>
      * public function getSecondaryColumns(): array {
      *    return [
-     *        'my-awesome-custom-column' => $this->$this->translate('Awesome data'),
+     *        'my-awesome-custom-column' => $this->translate('Awesome data'),
      *    ];
      *}
      * </code>
