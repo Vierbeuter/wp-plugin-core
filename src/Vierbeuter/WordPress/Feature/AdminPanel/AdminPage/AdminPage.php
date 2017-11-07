@@ -16,7 +16,7 @@ abstract class AdminPage extends Component
     /**
      * @var \Vierbeuter\WordPress\Service\Translator
      */
-    private $translator;
+    protected $translator;
 
     /**
      * AdminPage constructor.

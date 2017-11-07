@@ -16,7 +16,7 @@ abstract class SidebarMenu extends Component
     /**
      * @var \Vierbeuter\WordPress\Service\Translator
      */
-    private $translator;
+    protected $translator;
 
     /**
      * AdminPage constructor.
