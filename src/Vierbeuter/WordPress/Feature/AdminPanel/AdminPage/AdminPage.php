@@ -3,42 +3,20 @@
 namespace Vierbeuter\WordPress\Feature\AdminPanel\AdminPage;
 
 use Vierbeuter\WordPress\Di\Component;
-use Vierbeuter\WordPress\Service\Translator;
+use Vierbeuter\WordPress\Traits\HasTranslatorSupport;
 
 /**
  * The AdminPage class can be extended to implement pages to be included in the WP admin panel.
  *
- * @package Lenspire\WordPress\Feature\AdminPage
+ * @package Vierbeuter\WordPress\Feature\AdminPanel\AdminPage
  */
 abstract class AdminPage extends Component
 {
 
     /**
-     * @var \Vierbeuter\WordPress\Service\Translator
+     * include methods for translating texts
      */
-    protected $translator;
-
-    /**
-     * AdminPage constructor.
-     *
-     * @param \Vierbeuter\WordPress\Service\Translator $translator
-     */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * Returns a translation for the given text.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    protected function translate(string $text): string
-    {
-        return $this->translator->translate($text);
-    }
+    use HasTranslatorSupport;
 
     /**
      * Returns the page's title as set in HTML head.
