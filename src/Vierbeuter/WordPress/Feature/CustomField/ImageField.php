@@ -43,7 +43,7 @@ class ImageField extends CustomField
      */
     protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
     {
-        //	define field-ids for preview and upload-button
+        //  define field-ids for preview and upload-button
         $previewId = $fieldId . '_preview';
         $buttonId = $fieldId . '_upload';
 
