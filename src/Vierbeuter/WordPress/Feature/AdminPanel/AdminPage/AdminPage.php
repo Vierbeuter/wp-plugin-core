@@ -44,12 +44,12 @@ abstract class AdminPage extends Component
      */
     public function handlePostAndRenderPage(): void
     {
-        //	first of all handle the POST object unless empty
+        //  first of all handle the POST object unless empty
         if (!empty($_POST)) {
             $this->handlePost($_POST);
         }
 
-        //	render the page template
+        //  render the page template
         $this->render();
     }
 
