@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.7.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.7.0) (2017-11-15)
+### Added
+ * added base classes to easily implement new pages for WP admin panel as well as to add menu entries to the sidebar
+ * added some missing translations
+
+###  Fixed
+ * some (really) minor fixes and code style changes
+
 ## [0.6.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.6.1) (2017-10-16)
 ### Fixed
  * fixed bug for post-types' and taxonomies' WP hook support
