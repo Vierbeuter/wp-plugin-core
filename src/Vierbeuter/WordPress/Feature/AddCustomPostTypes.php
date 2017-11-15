@@ -255,10 +255,10 @@ abstract class AddCustomPostTypes extends Feature
             //  method not found
 
             //  make notice to the developer for missing method, also offer example implementation
-            echo sprintf(__('The column <code>%1$s</code> is unknown, no value to be rendered. Please implement <code>%2$s</code> method to determine a string-representation of the column value.',
-                    VBC_LANGUAGES_DOMAIN), $column, get_class($postType) . '->' . $getMethod . '()') . '<br />';
-            echo __('In case of a standard custom-field the implementation may look like the following:',
-                VBC_LANGUAGES_DOMAIN);
+            echo sprintf($this->translate('The column <code>%1$s</code> is unknown, no value to be rendered. Please implement <code>%2$s</code> method to determine a string-representation of the column value.',
+                    true), $column, get_class($postType) . '->' . $getMethod . '()') . '<br />';
+            echo $this->translate('In case of a standard custom-field the implementation may look like the following:',
+                true);
             echo "<pre>/**\n";
             echo " * Returns the value for column '$column' as string.\n";
             echo " * \n";
@@ -272,8 +272,8 @@ abstract class AddCustomPostTypes extends Feature
             echo "public function $getMethod(\\WP_Post \$post, array \$customFields): string {\n";
             echo "    return \$this->getCustomFieldValue(\$customFields, \$this->getSlug() . '-field_group_slug-field_slug');\n";
             echo "}</pre>";
-            echo sprintf(__('You can also use the <code>%1$s</code>-methods to render field values that are non-standard respectively of a specific type or kind such as the title and an image URL.',
-                    VBC_LANGUAGES_DOMAIN), 'getColumnValueFor…') . '<br />';
+            echo sprintf($this->translate('You can also use the <code>%1$s</code>-methods to render field values that are non-standard respectively of a specific type or kind such as the title and an image URL.',
+                    true), 'getColumnValueFor…') . '<br />';
         }
     }
 

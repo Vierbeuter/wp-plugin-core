@@ -27,15 +27,15 @@ class DropdownForReferencedPost extends CustomField
             throw new \InvalidArgumentException('Currently no taxonomy support, use this field on custom post-types only.');
         }
 
-        //	the actual input to be POSTed
+        //  the actual input to be POSTed
         echo '<input type="text" style="display: none;" id="' . $fieldId . '" name="' . $fieldId . '" value="' . $value . '" />';
 
-        //	helper input to fill actual input
+        //  helper input to fill actual input
         echo '<select id="dropdown-' . $fieldId . '" name="dropdown-' . $fieldId . '" size="1">';
         //  default option
         echo '<option value="">—</option>';
 
-        //	load all posts of the referenced post-type
+        //  load all posts of the referenced post-type
         query_posts([
             /** @see http://codex.wordpress.org/Class_Reference/WP_Query#Type_Parameters */
             'post_type' => $this->slug,
@@ -46,15 +46,15 @@ class DropdownForReferencedPost extends CustomField
             'orderby' => 'ID',
         ]);
 
-        //	split value by delimiter: each sub-string is an ID of the referenced posts
+        //  split value by delimiter: each sub-string is an ID of the referenced posts
         $ids = explode(';', $value);
 
-        //	ensure to have correct data-type --> get integer value
+        //  ensure to have correct data-type --> get integer value
         foreach ($ids as $key => $id) {
             $ids[$key] = intval($id);
         }
 
-        //	iterate all posts
+        //  iterate all posts
         while (have_posts()) {
             the_post();
             global $post;
@@ -72,7 +72,7 @@ class DropdownForReferencedPost extends CustomField
 
         echo '</select>';
 
-        //	reset post-data as recommended by official docs (http://codex.wordpress.org/Class_Reference/WP_Query#Usage)
+        //  reset post-data as recommended by official docs (http://codex.wordpress.org/Class_Reference/WP_Query#Usage)
         wp_reset_postdata();
     }
 

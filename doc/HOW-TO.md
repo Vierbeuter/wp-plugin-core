@@ -4,9 +4,10 @@ This document guides you through the plugin development for WordPress with the [
 
 ## Requirements
 
-* WordPress installation is up and running (we recommend using [Bedrock](https://roots.io/bedrock/))
-* your WP installation is [Composer](https://getcomposer.org/)-ready (which it definately is when using Bedrock)
-* `composer require wp-plugin-core` as described in the [README file](./../README.md) has been invoked to install the lib which is now available via vendor directory (see `./vendor/vierbeuter/wp-plugin-core/` in your project's docroot).
+* your local development environment and your test/production servers support **PHP 7.1** (we need that for using modern PHP language features such as return type declarations introduced in [PHP 7.0](http://php.net/manual/en/migration70.new-features.php) which may also be nullable as introduced in [PHP 7.1](http://php.net/manual/en/migration71.new-features.php))
+* **WordPress** installation is up and running (we recommend using [Bedrock](https://roots.io/bedrock/))
+* your WP installation is [**Composer**](https://getcomposer.org/)-ready (which it definately is when using Bedrock)
+* `composer require wp-plugin-core` as described in the [README file](./../README.md) has been invoked to **install the lib** which is now available via vendor directory (see `./vendor/vierbeuter/wp-plugin-core/` in your project's docroot).
 
 Alright, that's all we need. Let's get down to business!
 
