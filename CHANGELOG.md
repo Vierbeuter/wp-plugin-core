@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.8.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.8.0) (2017-11-21)
+### Added
+ * added base classes to easily implement new API endpoints and to add them to the WP REST API
+
 ## [0.7.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.7.0) (2017-11-15)
 ### Added
  * added base classes to easily implement new pages for WP admin panel as well as to add menu entries to the sidebar
