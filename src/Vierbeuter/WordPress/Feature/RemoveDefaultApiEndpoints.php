@@ -7,7 +7,7 @@ namespace Vierbeuter\WordPress\Feature;
  *
  * @package Vierbeuter\WordPress\Feature
  */
-abstract class RemoveDefaultApiEndpoints extends Feature
+class RemoveDefaultApiEndpoints extends Feature
 {
 
     /**

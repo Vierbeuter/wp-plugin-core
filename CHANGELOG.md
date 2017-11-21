@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.8.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.8.1) (2017-11-21)
+### Fixed
+ * fixed a dumb copy'n'paste error in one of the recently added features (the one for removing default REST API endpoints as added by WordPress)
+
 ## [0.8.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.8.0) (2017-11-21)
 ### Added
  * added base classes to easily implement new API endpoints and to add them to the WP REST API
