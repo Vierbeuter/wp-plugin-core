@@ -43,6 +43,7 @@ abstract class AddPagesToAdminPanel extends Feature
     protected function getActionHooks(): array
     {
         return [
+            /** @see \Vierbeuter\WordPress\Feature\AddPagesToAdminPanel::admin_menu() */
             'admin_menu',
         ];
     }
