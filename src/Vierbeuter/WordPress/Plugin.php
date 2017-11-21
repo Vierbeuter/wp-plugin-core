@@ -55,7 +55,7 @@ abstract class Plugin extends Component
      *
      *   //  NOTE:
      *   //  the parameter list of addComponent(…) is dependant on the parameter signature of the first class'
-     *   //  constructor (so, here we assume that AwesomeService' 1st parameter is expected to bean instance of
+     *   //  constructor (so, here we assume that AwesomeService' 1st parameter is expected to be an instance of
      *   //  AnyComponent and the 2nd one is of type OtherComponent)
      *
      *   //  also ensure the passed components are added to the DI-container
