@@ -235,7 +235,7 @@ abstract class CustomField
      * @param string $fieldId
      * @param string|null $value
      *
-     * @see \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\ConfigPage
+     * @see \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\WpOptionsPage
      */
     public function renderConfig(string $fieldId, string $value = null): void
     {
