@@ -3,6 +3,7 @@
 namespace Vierbeuter\WordPress\Feature\AdminPanel\AdminPage;
 
 use Vierbeuter\WordPress\Di\Component;
+use Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport;
 use Vierbeuter\WordPress\Traits\HasTranslatorSupport;
 
 /**
@@ -17,6 +18,10 @@ abstract class AdminPage extends Component
      * include methods for translating texts
      */
     use HasTranslatorSupport;
+    /**
+     * include methods for being able to provide WP-hook implementations
+     */
+    use HasWpHookSupport;
 
     /**
      * Returns the page's title as set in HTML head.

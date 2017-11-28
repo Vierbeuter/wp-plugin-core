@@ -30,6 +30,24 @@ abstract class WpOptionsPage extends AdminPage
     }
 
     /**
+     * Intializes the WordPress hooks as defined in the sub-class and in the fields of this wp_options page.
+     *
+     * Override getActionHooks() and getFilterHooks() methods to define these hooks.
+     *
+     * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getActionHooks()
+     * @see \Vierbeuter\WordPress\Feature\Traits\HasWpHookSupport::getFilterHooks()
+     */
+    public function initWpHooks(): void
+    {
+        parent::initWpHooks();
+
+        //  let all fields register their WP-hook implementations
+        foreach ($this->getFields() as $field) {
+            $field->initWpHooks();
+        }
+    }
+
+    /**
      * Returns all custom fields.
      *
      * @return \Vierbeuter\WordPress\Feature\CustomField\CustomField[]

@@ -132,6 +132,8 @@ abstract class SidebarMenu extends Component
             $this->addComponent($adminPageClass, ...$paramNames);
             //  instantiate by getting the admin page from container
             $adminPage = $this->getComponent($adminPageClass);
+            //  let the page register its WP-hook implementations
+            $adminPage->initWpHooks();
         }
 
         //  add to list of registered pages
