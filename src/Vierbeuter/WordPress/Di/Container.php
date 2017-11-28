@@ -54,7 +54,44 @@ class Container extends Pimple_Container
 
                 //  instantiate component of given class and pass the parameters
                 /** @var \Vierbeuter\WordPress\Di\Component $component */
-                $component = new $componentClass(...$params);
+                try {
+                    $component = new $componentClass(...$params);
+                } catch (\ArgumentCountError | \TypeError $error) {
+                    //  in case of error due to invalid parameters (not matching the required signature)
+                    //  try to provide a more detailed error message using reflection
+
+                    //  get a list of all expected parameters
+                    $reflectionClass = new \ReflectionClass($componentClass);
+                    $reflectionConstructor = $reflectionClass->getConstructor();
+                    $reflectionParameters = $reflectionConstructor->getParameters();
+                    $parameterTypes = array_map(function (\ReflectionParameter $reflectionParameter) {
+                        //  check parameter
+                        $isPrimitive = empty($reflectionParameter->getClass());
+                        $isBuiltIn = $reflectionParameter->getType()->isBuiltin();
+                        $name = $reflectionParameter->getType()->getName();
+                        $name = $isPrimitive && $isBuiltIn ? '<DI-key for parameter of type ' . $name . '>' : $name;
+
+                        return $name;
+                    }, $reflectionParameters);
+                    $constructorParametersExpected = implode(', ', $parameterTypes);
+
+                    //  get a list of all given parameters
+                    $parameterTypes = array_map(function ($parameter) {
+                        $type = gettype($parameter);
+                        $name = $type == 'object' ? get_class($parameter) : ('<' . $type . '>');
+
+                        return $name;
+                    }, $params);
+                    $constructorParametersGiven = implode(', ', $parameterTypes);
+
+                    //  build error message which is at least kind of helpful
+                    $message =
+                        'Invalid parameters passed to …->addComponent(…) for registration of DI-component "' . $componentClass . '".'
+                        . ' Expected: "…->addComponent(' . $componentClass . ', ' . $constructorParametersExpected . ')".'
+                        . ' But given: "…->addComponent(' . $componentClass . ', ' . $constructorParametersGiven . ')".';
+
+                    throw new \InvalidArgumentException($message, 0, $error);
+                }
                 //  set container to component
                 $component->setContainer($c);
 
