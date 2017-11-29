@@ -142,7 +142,7 @@ class WpOptions extends Service
     public function getByPageClass(string $wpOptionsPageClass, string $fieldSlug, $default = null)
     {
         //  check given class first
-        if (empty($featureClass) || !is_subclass_of($featureClass, WpOptionsPage::class)) {
+        if (empty($wpOptionsPageClass) || !is_subclass_of($wpOptionsPageClass, WpOptionsPage::class)) {
             throw new \InvalidArgumentException('Given class "' . $wpOptionsPageClass . '" needs to be a valid sub-class of "' . WpOptionsPage::class . '"');
         }
 
