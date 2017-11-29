@@ -2,31 +2,36 @@
 
 namespace Vierbeuter\WordPress\Feature\AdminPanel\AdminPage;
 
-use Vierbeuter\WordPress\PluginData;
+use Vierbeuter\WordPress\Service\WpOptions;
 
 /**
  * WpOptionsPage is the base class for implementing and adding settings pages to the wp-admin panel that entries of
  * <code>wp_options</code> can be configured with. For ease of use you just have to provide a list of custom fields
  * (each one will automatically be mapped to an entry of <code>wp_options</code>).
  *
+ * To read and update your <code>wp_options</code> entries that are defined in this page through these custom-fields
+ * just use the WpOptions service.
+ *
  * @package Vierbeuter\WordPress\Feature\AdminPanel\AdminPage
+ *
+ * @see \Vierbeuter\WordPress\Service\WpOptions
  */
 abstract class WpOptionsPage extends AdminPage
 {
 
     /**
-     * @var \Vierbeuter\WordPress\PluginData
+     * @var \Vierbeuter\WordPress\Service\WpOptions
      */
-    private $pluginData;
+    protected $wpOptions;
 
     /**
      * WpOptionsPage constructor.
      *
-     * @param \Vierbeuter\WordPress\PluginData $pluginData
+     * @param \Vierbeuter\WordPress\Service\WpOptions $wpOptions
      */
-    public function __construct(PluginData $pluginData)
+    public function __construct(WpOptions $wpOptions)
     {
-        $this->pluginData = $pluginData;
+        $this->wpOptions = $wpOptions;
     }
 
     /**
@@ -63,7 +68,7 @@ abstract class WpOptionsPage extends AdminPage
     {
         //  update wp_options for all custom fields
         foreach ($this->getFields() as $field) {
-            $fieldId = $this->getDbMetaKey($field->getSlug());
+            $fieldId = $this->getFieldId($field->getSlug());
 
             if (isset($post[$fieldId])) {
                 //  POST values are escaped by default using addslashes(), see wp_magic_quotes() and add_magic_quotes()
@@ -72,7 +77,7 @@ abstract class WpOptionsPage extends AdminPage
                 //  --> unescape the value with stripslashes() which is the counterpart of addslashes()
                 $post[$fieldId] = stripslashes($post[$fieldId]);
 
-                update_option($fieldId, $post[$fieldId]);
+                $this->wpOptions->setByPage($this, $field->getSlug(), $post[$fieldId]);
             }
         }
     }
@@ -96,8 +101,8 @@ abstract class WpOptionsPage extends AdminPage
 
         //  render all custom fields
         foreach ($this->getFields() as $field) {
-            $fieldId = $this->getDbMetaKey($field->getSlug());
-            $value = get_option($fieldId, null);
+            $fieldId = $this->getFieldId($field->getSlug());
+            $value = $this->wpOptions->getByPage($this, $field->getSlug());
 
             $field->renderConfig($fieldId, $value);
         }
@@ -121,15 +126,15 @@ abstract class WpOptionsPage extends AdminPage
     }
 
     /**
-     * Returns the database key for accessing the wp_options-value.
+     * Returns the field id for usage in rendered form and POST object.
      *
      * @param string $fieldSlug
      *
      * @return string
      */
-    protected function getDbMetaKey(string $fieldSlug): string
+    protected function getFieldId(string $fieldSlug): string
     {
-        //  concat plugin name and slug of page with custom-field slug
-        return $this->pluginData->getPluginName() . '-' . $this->getSlug() . '-' . $fieldSlug;
+        //  concat slug of page with custom-field slug
+        return $this->getSlug() . '-' . $fieldSlug;
     }
 }
