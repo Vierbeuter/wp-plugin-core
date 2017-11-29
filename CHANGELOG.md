@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.9.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.0) (2017-11-29)
+### Added
+ * added base classes to easily implement settings pages in WP admin panel using `wp_options`
+ * added a ready-to-use service class for accessing `wp_options`
+ * added more detailed error message on registering DI-components with invalid parameter signature (&rarr; when passing parameters to `Container->addComponent(…)` that do not match the parameter list of the component's constructor)
+
 ## [0.8.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.8.1) (2017-11-21)
 ### Fixed
  * fixed a dumb copy'n'paste error in one of the recently added features (the one for removing default REST API endpoints as added by WordPress)
