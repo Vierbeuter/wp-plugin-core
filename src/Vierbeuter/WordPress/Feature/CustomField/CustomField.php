@@ -230,6 +230,44 @@ abstract class CustomField
     }
 
     /**
+     * Renders the markup of this custom-field for a ConfigPage.
+     *
+     * @param string $fieldId
+     * @param string|null $value
+     *
+     * @see \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\WpOptionsPage
+     */
+    public function renderConfig(string $fieldId, string $value = null): void
+    {
+        //  wrapper begin
+        echo '<tr>';
+
+        //  header area ("left side")
+        echo '<th scope="row">';
+        //  label
+        $this->renderLabel($fieldId);
+        echo '</th>';
+
+        //  input area ("right side")
+        echo '<td>';
+        //  the actual input field
+        $this->renderField(null, $fieldId, $value);
+        //  optional description/usage hint
+        /**
+         * styling with CSS class "custom-field-note"
+         *
+         * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head()
+         */
+        $this->renderDescription($fieldId, 'custom-field-note clear');
+        //  other… e.g. Javascript
+        $this->renderAnythingAfterField(null, $fieldId, $value);
+        echo '</td>';
+
+        //  wrapper end
+        echo '</tr>';
+    }
+
+    /**
      * Renders the label's markup.
      *
      * @param string $fieldId
