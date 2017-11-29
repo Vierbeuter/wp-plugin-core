@@ -66,6 +66,12 @@ abstract class WpOptionsPage extends AdminPage
             $fieldId = $this->getDbMetaKey($field->getSlug());
 
             if (isset($post[$fieldId])) {
+                //  POST values are escaped by default using addslashes(), see wp_magic_quotes() and add_magic_quotes()
+                /** @see wp_magic_quotes() */
+                /** @see add_magic_quotes() */
+                //  --> unescape the value with stripslashes() which is the counterpart of addslashes()
+                $post[$fieldId] = stripslashes($post[$fieldId]);
+
                 update_option($fieldId, $post[$fieldId]);
             }
         }
