@@ -9,6 +9,7 @@
  * ~~ensure a plugin dev is able to translate his/her plugin as well~~ (added to 0.2.0)
  * ~~docs! … add a (simple) how-to or guide~~(added to 0.4.0)
  * ~~api feature for easily creating API endpoints using the [WP REST API](https://developer.wordpress.org/rest-api/)~~ (added to 0.8.0)
+ * ~~service for accessing `wp_options` and base class to easily build config pages in WP-admin panel for lettings users update the `wp_options` entries~~ (added to 0.9.0)
  * some last optimizations and todos for custom taxonomies and fields
  * maybe add some additional features or base classes for feature implementations … maybe
 
