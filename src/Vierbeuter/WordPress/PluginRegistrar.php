@@ -5,6 +5,7 @@ namespace Vierbeuter\WordPress;
 use Vierbeuter\WordPress\Di\Container;
 use Vierbeuter\WordPress\Service\CoreTranslator;
 use Vierbeuter\WordPress\Service\PluginTranslator;
+use Vierbeuter\WordPress\Service\WpOptions;
 
 /**
  * The PluginRegistrar registers and activates WordPress plugins built upon `wp-plugin-core` library.
@@ -131,6 +132,9 @@ class PluginRegistrar
         $this->container->addComponent(PluginTranslator::class, PluginData::class);
         //  add translator for the base classes / plugin core
         $this->container->addComponent(CoreTranslator::class);
+
+        //  add wp_options service
+        $this->container->addComponent(WpOptions::class, PluginData::class);
     }
 
     /**

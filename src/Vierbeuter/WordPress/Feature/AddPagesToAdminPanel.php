@@ -23,11 +23,16 @@ abstract class AddPagesToAdminPanel extends Feature
     protected $sidebarMenus;
 
     /**
-     * AddPagesToAdminPanel constructor.
+     * Activates the feature to actually extend WP functionality.
+     *
+     * @see \Vierbeuter\WordPress\Feature\AddPagesToAdminPanel::initSidebarMenus()
      */
-    public function __construct()
+    public function activate(): void
     {
-        $this->sidebarMenus = [];
+        parent::activate();
+
+        //  initialize the sidebar menus
+        $this->initSidebarMenus();
     }
 
     /**
@@ -52,15 +57,11 @@ abstract class AddPagesToAdminPanel extends Feature
      * Hooks into "admin_menu" to add menu entries to the admin-panel's sidebar as defined by
      * <code>initSidebarMenus()</code> method.
      *
-     * @see \Vierbeuter\WordPress\Feature\AddPagesToAdminPanel::initSidebarMenus()
      * @see https://developer.wordpress.org/reference/functions/add_menu_page/
      * @see https://developer.wordpress.org/reference/functions/add_submenu_page/
      */
     public function admin_menu(): void
     {
-        //  initialize the sidebar menus
-        $this->initSidebarMenus();
-
         //  itereate the menus and add one by one to the sidebar
         foreach ($this->sidebarMenus as $menu) {
             //  first of all check the current menu
@@ -68,8 +69,6 @@ abstract class AddPagesToAdminPanel extends Feature
                 throw new \Exception('Given $menu (which is an instance of "' . get_class($menu) . '") is expected to be a sub-class of "' . SidebarMenu::class . '" but isn\'t.');
             }
 
-            //  initialize the admin pages for the current menu
-            $menu->initAdminPanelPages();
             //  get all pages for this menu
             /** @var \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\AdminPage[] $pages */
             $pages = $menu->getAdminPanelPages();
@@ -157,6 +156,8 @@ abstract class AddPagesToAdminPanel extends Feature
             $this->addComponent($sidebarMenuClass, ...$paramNames);
             //  instantiate by getting the sidebar menu from container
             $sidebarMenu = $this->getComponent($sidebarMenuClass);
+            //  initialize the admin pages for the current menu
+            $sidebarMenu->initAdminPanelPages();
         }
 
         //  add to list of registered menus
