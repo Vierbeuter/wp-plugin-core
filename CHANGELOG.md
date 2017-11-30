@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.9.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.1) (2017-11-30)
+### Added
+ * added `WpEditor` field to use `wp_editor(…)`
+
 ## [0.9.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.0) (2017-11-29)
 ### Added
  * added base classes to easily implement settings pages in WP admin panel using `wp_options`
