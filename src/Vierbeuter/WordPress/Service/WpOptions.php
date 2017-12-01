@@ -49,6 +49,44 @@ class WpOptions extends Service
     }
 
     /**
+     * Returns the <code>wp_options</code> value for given option name.
+     *
+     * This method is just an encapsulation of WP's <code>get_option(…)</code> function. It's the counterpart of the
+     * <code>updateOption(…)</code> method.
+     *
+     * @param string $name the option's name
+     * @param mixed|null $default default return value in case of no wp_option found for given option name
+     *
+     * @return mixed
+     *
+     * @see https://developer.wordpress.org/reference/functions/get_option/
+     * @see \Vierbeuter\WordPress\Service\WpOptions::updateOption()
+     */
+    protected function getOption(string $name, $default = null)
+    {
+        return get_option($name, $default);
+    }
+
+    /**
+     * Saves given value to <code>wp_options</code> with given option name.
+     *
+     * This method is just an encapsulation of WP's <code>update_option(…)</code> function. It's the counterpart of the
+     * <code>getOption(…)</code> method.
+     *
+     * @param string $name the option's name
+     * @param mixed $value the option's value
+     *
+     * @return bool
+     *
+     * @see https://developer.wordpress.org/reference/functions/update_option/
+     * @see \Vierbeuter\WordPress\Service\WpOptions::getOption()
+     */
+    protected function updateOption(string $name, $value): bool
+    {
+        return update_option($name, $value);
+    }
+
+    /**
      * Returns the <code>wp_options</code> value for given key.
      *
      * Always use this method to load a value from the storage if it has been stored to <code>wp_options</code> using
@@ -63,7 +101,7 @@ class WpOptions extends Service
      */
     public function get(string $key, $default = null)
     {
-        return get_option($this->getDbMetaKey($key), $default);
+        return $this->getOption($this->getDbMetaKey($key), $default);
     }
 
     /**
@@ -80,7 +118,7 @@ class WpOptions extends Service
      */
     public function set(string $key, $value): bool
     {
-        return update_option($this->getDbMetaKey($key), $value);
+        return $this->updateOption($this->getDbMetaKey($key), $value);
     }
 
     /**
@@ -98,7 +136,7 @@ class WpOptions extends Service
      */
     public function getByPage(WpOptionsPage $wpOptionsPage, string $fieldSlug, $default = null)
     {
-        return get_option($this->getDbMetaKey($fieldSlug, $wpOptionsPage), $default);
+        return $this->getOption($this->getDbMetaKey($fieldSlug, $wpOptionsPage), $default);
     }
 
     /**
@@ -118,7 +156,7 @@ class WpOptions extends Service
      */
     public function setByPage(WpOptionsPage $wpOptionsPage, string $fieldSlug, $value): bool
     {
-        return update_option($this->getDbMetaKey($fieldSlug, $wpOptionsPage), $value);
+        return $this->updateOption($this->getDbMetaKey($fieldSlug, $wpOptionsPage), $value);
     }
 
     /**
