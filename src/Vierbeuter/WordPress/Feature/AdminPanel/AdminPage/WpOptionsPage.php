@@ -100,12 +100,7 @@ abstract class WpOptionsPage extends AdminPage
         echo '<table class="form-table">';
 
         //  render all custom fields
-        foreach ($this->getFields() as $field) {
-            $fieldId = $this->getFieldId($field->getSlug());
-            $value = $this->wpOptions->getByPage($this, $field->getSlug());
-
-            $field->renderConfig($fieldId, $value);
-        }
+        $this->renderFields();
 
         //  update button
         echo '<tr>';
@@ -136,5 +131,18 @@ abstract class WpOptionsPage extends AdminPage
     {
         //  concat slug of page with custom-field slug
         return $this->getSlug() . '-' . $fieldSlug;
+    }
+
+    /**
+     * Renders all custom fields.
+     */
+    protected function renderFields(): void
+    {
+        foreach ($this->getFields() as $field) {
+            $fieldId = $this->getFieldId($field->getSlug());
+            $value = $this->wpOptions->getByPage($this, $field->getSlug());
+
+            $field->renderConfig($fieldId, $value);
+        }
     }
 }

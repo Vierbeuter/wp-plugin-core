@@ -14,10 +14,13 @@ abstract class Selection extends CustomField
      * Renders the label's markup.
      *
      * @param string $fieldId
+     * @param string|null $labelAppendix
      */
-    protected function renderLabel(string $fieldId): void
+    protected function renderLabel(string $fieldId, string $labelAppendix = null): void
     {
-        echo '<label>' . $this->label . '</label>';
+        $appendToLabel = !empty($labelAppendix) ? ' (' . $labelAppendix . ')' : '';
+
+        echo '<label>' . $this->label . $appendToLabel . '</label>';
     }
 
     /**
