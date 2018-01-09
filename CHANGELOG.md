@@ -1,8 +1,18 @@
 # Change Log
 
-## [0.9.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.2) (2018-01-09)
+## [0.9.3](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.3) (2018-01-09)
 ### Added
- * added new `WpmlWpOptions` service supporting [WPML](https://wpml.org/) for making `wp_options` translatable (requires the [String Translation module](https://wpml.org/documentation/getting-started-guide/string-translation/))
+ * added `WpmlWpOptionsPage` to make better use of `WpmlWpOptions` service
+
+### Changed
+ * remove requirement of WPML's String Translation module (as added in 0.9.2)
+ * config pages for `wp_options` (if extending `WpmlWpOptionsPage`) can now take care of WPML's language switch located in WP's admin bar (config pages that don't have to be translatable can still extend `WpOptionsPage`)
+
+## ~~[0.9.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.2) (2018-01-09)~~
+### ~~Added~~
+ * ~~added new `WpmlWpOptions` service supporting [WPML](https://wpml.org/) for making `wp_options` translatable (requires the [String Translation module](https://wpml.org/documentation/getting-started-guide/string-translation/))~~
+
+*Note*: Changes have been nearly completely overriden by 0.9.3 Do not rely on this version, update ASAP.
 
 ## [0.9.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.1) (2017-11-30)
 ### Added

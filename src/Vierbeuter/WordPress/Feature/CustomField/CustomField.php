@@ -268,13 +268,55 @@ abstract class CustomField
     }
 
     /**
+     * Renders the markup of this custom-field for a ConfigPage supporting WPML.
+     *
+     * @param string $fieldId
+     * @param string $langCode
+     * @param string|null $value
+     *
+     * @see \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\WpmlWpOptionsPage
+     */
+    public function renderWpmlConfig(string $fieldId, string $langCode, string $value = null): void
+    {
+        //  wrapper begin
+        echo '<tr>';
+
+        //  header area ("left side")
+        echo '<th scope="row">';
+        //  label
+        $this->renderLabel($fieldId, strtoupper($langCode));
+        echo '</th>';
+
+        //  input area ("right side")
+        echo '<td>';
+        //  the actual input field
+        $this->renderField(null, $fieldId, $value);
+        //  optional description/usage hint
+        /**
+         * styling with CSS class "custom-field-note"
+         *
+         * @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head()
+         */
+        $this->renderDescription($fieldId, 'custom-field-note clear');
+        //  other… e.g. Javascript
+        $this->renderAnythingAfterField(null, $fieldId, $value);
+        echo '</td>';
+
+        //  wrapper end
+        echo '</tr>';
+    }
+
+    /**
      * Renders the label's markup.
      *
      * @param string $fieldId
+     * @param string|null $labelAppendix
      */
-    protected function renderLabel(string $fieldId): void
+    protected function renderLabel(string $fieldId, string $labelAppendix = null): void
     {
-        echo '<label for="' . $fieldId . '">' . $this->label . '</label>';
+        $appendToLabel = !empty($labelAppendix) ? ' (' . $labelAppendix . ')' : '';
+
+        echo '<label for="' . $fieldId . '">' . $this->label . $appendToLabel . '</label>';
     }
 
     /**
