@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.9.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.2) (2018-01-09)
+### Added
+ * added new `WpmlWpOptions` service supporting [WPML](https://wpml.org/) for making `wp_options` translatable (requires the [String Translation module](https://wpml.org/documentation/getting-started-guide/string-translation/))
+
 ## [0.9.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.1) (2017-11-30)
 ### Added
  * added `WpEditor` field to use `wp_editor(…)`
