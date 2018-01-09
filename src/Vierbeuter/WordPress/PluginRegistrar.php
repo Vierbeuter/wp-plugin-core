@@ -5,6 +5,7 @@ namespace Vierbeuter\WordPress;
 use Vierbeuter\WordPress\Di\Container;
 use Vierbeuter\WordPress\Service\CoreTranslator;
 use Vierbeuter\WordPress\Service\PluginTranslator;
+use Vierbeuter\WordPress\Service\WpmlWpOptions;
 use Vierbeuter\WordPress\Service\WpOptions;
 
 /**
@@ -135,6 +136,8 @@ class PluginRegistrar
 
         //  add wp_options service
         $this->container->addComponent(WpOptions::class, PluginData::class);
+        //  add wp_options service supporting WPML
+        $this->container->addComponent(WpmlWpOptions::class, PluginData::class);
     }
 
     /**

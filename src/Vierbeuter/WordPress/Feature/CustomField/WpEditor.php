@@ -50,6 +50,7 @@ class WpEditor extends CustomField
     {
         return [
             'media_buttons' => false,
+            'quicktags' => false,
             'tinymce' => [
                 'height' => 200,
                 'inline_styles' => false,
