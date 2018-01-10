@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.9.4](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.4) (2018-01-10)
+### Added
+ * made it possible to pass route args to REST API endpoints
+
 ## [0.9.3](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.3) (2018-01-09)
 ### Added
  * added `WpmlWpOptionsPage` to make better use of `WpmlWpOptions` service

@@ -22,7 +22,34 @@ abstract class ApiEndpoint extends Component
     /**
      * Returns the endpoint's routes.
      *
+     * Routes are expected to be strings. Optionally an args array can be given as array value while the array key is
+     * the route.
+     *
+     * Therefore, the returned value may be a simple (indexed) list of routes, an associative array (respectively a map
+     * or dictionary or whatever you want to call it) of routes and their args or it can be a mixture of simple values
+     * and key-value-pairs.
+     *
+     * Sample:
+     *
+     * <code>
+     * return [
+     *     'my-awesome-route',
+     *     'route-with-args/(?P<myarg>\d+)' => [
+     *         'myarg' => [
+     *             // …
+     *         ]
+     *         // add args here …
+     *     ],
+     *     'my-other/awesome-route',
+     * ];
+     * </code>
+     *
+     * See official WP docs of register_rest_route(…) function where you'll find examples for routes.
+     *
      * @return string[]
+     *
+     * @see https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/#arguments
+     * @see https://developer.wordpress.org/reference/functions/register_rest_route/
      */
     abstract public function getRoutes(): array;
 
@@ -47,19 +74,32 @@ abstract class ApiEndpoint extends Component
      * Registers all routes to match this endpoint implementation.
      *
      * @see https://developer.wordpress.org/reference/functions/register_rest_route/
+     * @see https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
      */
     public function register(): void
     {
-        foreach ($this->getRoutes() as $route) {
+        foreach ($this->getRoutes() as $route => $routeArgs) {
+            //  if current route has no args given (since it's an indexed array entry)
+            if (is_int($route)) {
+                //  make it a key-value-pair of route and its (empty) args
+                $route = $routeArgs;
+                $routeArgs = [];
+            }
+
             //  check the route's data type
             if (!is_string($route)) {
                 throw new \InvalidArgumentException('The given route is expected to be a string but ' . gettype($route) . ' given: "' . $route . '"');
+            }
+            //  check the route args' data type
+            if (!is_array($routeArgs)) {
+                throw new \InvalidArgumentException('The given route args are expected to be an array but ' . gettype($routeArgs) . ' given: "' . $routeArgs . '"');
             }
 
             //  register the route
             register_rest_route($this->getNamespace(), $route, [
                 'methods' => $this->getMethod(),
                 'callback' => [$this, 'getResponseData'],
+                'args' => $routeArgs,
             ]);
         }
     }
