@@ -158,7 +158,7 @@ class WpmlWpOptions extends WpOptions
         /** @var \Vierbeuter\WordPress\Feature\AdminPanel\AdminPage\WpOptionsPage $wpOptionsPage */
         $wpOptionsPage = $this->getComponent($wpOptionsPageClass);
 
-        return $this->getByPage($wpOptionsPage, $fieldSlug, $default);
+        return $this->getByPage($wpOptionsPage, $fieldSlug, $default, $langCode);
     }
 
     /**
