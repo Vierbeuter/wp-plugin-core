@@ -60,8 +60,9 @@ abstract class CustomPostType extends Component
 
         //  let all fields register their WP-hook implementations
         foreach ($this->getFieldGroups() as $fieldGroup) {
-            foreach ($fieldGroup->getFields() as $field)
-            $field->initWpHooks();
+            foreach ($fieldGroup->getFields() as $field) {
+                $field->initWpHooks();
+            }
         }
     }
 
@@ -284,11 +285,13 @@ abstract class CustomPostType extends Component
     /**
      * Returns a list of columns that have to be sortable in admin panel.
      *
+     * @param array $columns
+     *
      * @return array
      */
-    public function getSortableColumns(): array
+    public function getSortableColumns(array $columns): array
     {
-        return [];
+        return $columns;
     }
 
     /**
