@@ -294,26 +294,42 @@ abstract class AddCustomPostTypes extends Feature
     }
 
     /**
-     * Hooks into the same-named filter hook to extend the fulltext-search for also searching custom-fields of a
-     * post-type.
+     * Hooks into the same-named filter hook to manipulate the given query to select posts with.
      *
      * @param \WP_Query $query
-     *
-     * @see http://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
      */
     public function pre_get_posts(\WP_Query $query): void
     {
+        //  determine post-type
+        $postType = $this->getPostType($query->query['post_type']);
+
+        //  if no post-type found then let the given query untouched
+        if (empty($postType)) {
+            return;
+        }
+
+        //  extend fulltext-search in admin-panel
+        $this->extendFulltextSearchForAdminPanel($query, $postType);
+
+        //  let the post-type manipulate the query on its own
+        $postType->preGetPosts($query);
+    }
+
+    /**
+     * Extends the fulltext-search when being in admin-panel for also searching custom-fields of given post-type
+     * instead of searching for title and content only. The list of custom-fields to search by can be defined using the
+     * <code>getCustomFieldSlugsForAdminSearch()</code> method.
+     *
+     * @param \WP_Query $query
+     * @param \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType $postType
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getCustomFieldSlugsForAdminSearch()
+     * @see http://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
+     */
+    protected function extendFulltextSearchForAdminPanel(\WP_Query $query, CustomPostType $postType): void
+    {
         //  only change database-queries that are made for a search in the admin panel
         if ($query->is_search() && $query->is_admin) {
-            //  determine post-type
-            $postType = $this->getPostType($query->query['post_type']);
-
-            //  if no post-type found then let the given query untouched
-            //  ignore any custom-fields for now and therefore don't extend the fulltext-search at all  …
-            if (empty($postType)) {
-                return;
-            }
-
             //  get searchable custom-fields for requested post-type
             $customFieldSlugs = $postType->getCustomFieldSlugsForAdminSearch();
             //  get the search-term from GET parameters
