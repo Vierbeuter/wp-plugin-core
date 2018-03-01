@@ -172,8 +172,8 @@ trait HasWpHookSupport
             //  array-notation with full information
             'name_of_hook' => array(
                 'method' => 'name_of_method',
-                'prio' => 10,	//  priority ist optional
-                'args' => 1,	//  arguments ist optional
+                'prio' => 10,	//  priority is optional
+                'args' => 1,	//  arguments is optional
             ),
 
             //  array-notation with leaving out optional keys and values
@@ -183,15 +183,15 @@ trait HasWpHookSupport
 
             //  "method" key also optional as long as the array itself has a key
             'name_of_hook_and_method' => array(
-                'prio' => 10,	//  priority ist optional
-                'args' => 1,	//  arguments ist optional
+                'prio' => 10,	//  priority is optional
+                'args' => 1,	//  arguments is optional
             ),
 
             //  key of the array itself is optional as long as there is a corresponding entry for "method" key
             array(
                 'method' => 'name_of_hook_and_method',
-                'prio' => 10,	//  priority ist optional
-                'args' => 1,	//  arguments ist optional
+                'prio' => 10,	//  priority is optional
+                'args' => 1,	//  arguments is optional
             ),
             */
         ];
