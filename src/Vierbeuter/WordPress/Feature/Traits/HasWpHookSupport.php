@@ -150,7 +150,7 @@ trait HasWpHookSupport
     }
 
     /**
-     * Returns a list of actions to be hooked into by this class. For each hook there <strong>must</strong> be defined a
+     * Returns a list of filters to be hooked into by this class. For each hook there <strong>must</strong> be defined a
      * public method with the same name as the hook (unless the hook's name consists of hyphens "-", for the appropriate
      * method name underscores "_" have to be used).
      *
