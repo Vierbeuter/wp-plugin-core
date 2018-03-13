@@ -399,7 +399,7 @@ abstract class CustomField
      * @see https://developer.wordpress.org/reference/functions/wp_enqueue_style/
      * @see https://developer.wordpress.org/reference/functions/get_current_screen/
      */
-    public function enqueueScripts()
+    public function enqueueScripts(): void
     {
         //  may be overridden
     }
