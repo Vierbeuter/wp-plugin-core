@@ -449,7 +449,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ../src\n"
-"X-Poedit-KeywordsList: __;_e;_x;_n;translate;vbTranslate\n"
+"X-Poedit-KeywordsList: __;_e;_x;_n;translate\n"
 "X-Generator: Poedit 2.0.1\n"
 "X-Poedit-SearchPath-0: .\n"
 ```
