@@ -41,8 +41,9 @@ class WpEditor extends CustomField
      * Returns the default settings for the wp_editor.
      *
      * To keep things as simple as possible the returned settings array makes the toolbar offering only the most
-     * important buttons (bold, italic, link and lists). Pass <code>['tinymce'=>true]</code> as settings array to the constructor to override this
-     * simplicity and to restore WP's WYSIWYG editor with all its standard buttons and elements.
+     * important buttons (bold, italic, link and lists). Pass <code>['tinymce'=>true]</code> as settings array to the
+     * constructor to override this simplicity and to restore WP's WYSIWYG editor with all its standard buttons and
+     * elements.
      *
      * @return array
      */
@@ -101,7 +102,7 @@ class WpEditor extends CustomField
      * @see https://developer.wordpress.org/reference/functions/wp_enqueue_style/
      * @see https://developer.wordpress.org/reference/functions/get_current_screen/
      */
-    public function enqueueScripts()
+    public function enqueueScripts(): void
     {
         // load scripts and such stuff for rendering the editor
         wp_enqueue_editor();
