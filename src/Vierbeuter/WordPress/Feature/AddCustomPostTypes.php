@@ -123,13 +123,18 @@ abstract class AddCustomPostTypes extends Feature
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::save_post() */
             'save_post',
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::manage_posts_custom_column() */
-            'manage_posts_custom_column',        //  for non hierarchical post-types
+            'manage_posts_custom_column',        //  for non-hierarchical post-types
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::manage_pages_custom_column() */
             'manage_pages_custom_column' => [    //  for hierarchical/nestable post-types
                 'args' => 2,
             ],
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head() */
             'admin_head',
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::filterRevisionFields() */
+            '_wp_post_revision_fields' => [
+                'method' => 'filterRevisionFields',
+                'args' => 2,
+            ],
         ];
     }
 
@@ -193,8 +198,10 @@ abstract class AddCustomPostTypes extends Feature
 
             //  iterate the field-groups
             foreach ($fieldGroups as $fieldGroup) {
+                $fieldGroup->setPostType($postType);
+
                 //  register field-group to current post-type to render its form-fields
-                $fieldGroup->register($postType);
+                $fieldGroup->register();
             }
         }
     }
@@ -215,6 +222,8 @@ abstract class AddCustomPostTypes extends Feature
         if (!empty($postType)) {
             //  iterate the post-type's field-groups
             foreach ($postType->getFieldGroups() as $fieldGroup) {
+                $fieldGroup->setPostType($postType);
+
                 //  save form data for each custom-field of current field-group
                 $fieldGroup->save($postType->getSlug(), $postId);
             }
@@ -294,26 +303,42 @@ abstract class AddCustomPostTypes extends Feature
     }
 
     /**
-     * Hooks into the same-named filter hook to extend the fulltext-search for also searching custom-fields of a
-     * post-type.
+     * Hooks into the same-named filter hook to manipulate the given query to select posts with.
      *
      * @param \WP_Query $query
-     *
-     * @see http://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
      */
     public function pre_get_posts(\WP_Query $query): void
     {
+        //  determine post-type
+        $postType = $this->getPostType($query->query['post_type']);
+
+        //  if no post-type found then let the given query untouched
+        if (empty($postType)) {
+            return;
+        }
+
+        //  extend fulltext-search in admin-panel
+        $this->extendFulltextSearchForAdminPanel($query, $postType);
+
+        //  let the post-type manipulate the query on its own
+        $postType->preGetPosts($query);
+    }
+
+    /**
+     * Extends the fulltext-search when being in admin-panel for also searching custom-fields of given post-type
+     * instead of searching for title and content only. The list of custom-fields to search by can be defined using the
+     * <code>getCustomFieldSlugsForAdminSearch()</code> method.
+     *
+     * @param \WP_Query $query
+     * @param \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType $postType
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getCustomFieldSlugsForAdminSearch()
+     * @see http://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
+     */
+    protected function extendFulltextSearchForAdminPanel(\WP_Query $query, CustomPostType $postType): void
+    {
         //  only change database-queries that are made for a search in the admin panel
         if ($query->is_search() && $query->is_admin) {
-            //  determine post-type
-            $postType = $this->getPostType($query->query['post_type']);
-
-            //  if no post-type found then let the given query untouched
-            //  ignore any custom-fields for now and therefore don't extend the fulltext-search at all  …
-            if (empty($postType)) {
-                return;
-            }
-
             //  get searchable custom-fields for requested post-type
             $customFieldSlugs = $postType->getCustomFieldSlugsForAdminSearch();
             //  get the search-term from GET parameters
@@ -449,8 +474,9 @@ abstract class AddCustomPostTypes extends Feature
 
                     //  iterate all field-groups (in case of first group has no custom-fields)
                     foreach ($postType->getFieldGroups() as $fieldGroup) {
+                        $fieldGroup->setPostType($postType);
+
                         //  get first field (unless field list is empty)
-                        //  erstes Feld holen (sofern vorhanden)
                         $fields = $fieldGroup->getFields();
                         $firstField = reset($fields);
 
@@ -477,5 +503,39 @@ abstract class AddCustomPostTypes extends Feature
         }
 
         return $data;
+    }
+
+    /**
+     * Adds custom fields to the list of fields which have to be saved using revisions. Depends on the post-types'
+     * revision support.
+     *
+     * @param array $fields list of fields to revision, contains 'post_title', 'post_content', and 'post_excerpt' by
+     *     default.
+     * @param array $post a post array being processed for insertion as a post revision
+     *
+     * @return array the filtered list including all added custom-fields
+     *
+     * @see https://developer.wordpress.org/reference/hooks/_wp_post_revision_fields/
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::supportsRevisions()
+     */
+    public function filterRevisionFields(array $fields, array $post)
+    {
+        //  iterate all post-types to add their fields to $fields array
+        foreach ($this->getPostTypes() as $postType) {
+
+            //  only those fields are of interest whose overlying post-types support revisions
+            if ($postType->supportsRevisions()) {
+
+                foreach ($postType->getFieldGroups() as $fieldGroup) {
+                    $fieldGroup->setPostType($postType);
+
+                    foreach ($fieldGroup->getFields() as $field) {
+                        $fields[$fieldGroup->getFieldDbMetaKey($field)] = $field->getSlug();
+                    }
+                }
+            }
+        }
+
+        return $fields;
     }
 }

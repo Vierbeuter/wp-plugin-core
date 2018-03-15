@@ -79,8 +79,8 @@ abstract class CustomField
     /**
      * Sets the slug.
      *
-     * Caution: This is no a "fully qualified" slug of the custom field, but the last part of it which is just the $slug
-     * as given to constructor.
+     * Caution: This is not a "fully qualified" slug of the custom field, but the last part of it which is just the
+     * $slug as given to constructor.
      *
      * To determine the "fully qualified" slug please use getFieldDbMetaKey() method of class FieldGroup instead.
      *
@@ -399,7 +399,7 @@ abstract class CustomField
      * @see https://developer.wordpress.org/reference/functions/wp_enqueue_style/
      * @see https://developer.wordpress.org/reference/functions/get_current_screen/
      */
-    public function enqueueScripts()
+    public function enqueueScripts(): void
     {
         //  may be overridden
     }

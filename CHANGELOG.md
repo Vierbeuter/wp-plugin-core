@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.10.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.0) (2018-03-15)
+### Added
+ * added revision support for post-types and their custom-fields
+ 
+### Fixed
+ * fixed the default columns of custom post-types in the admin panel's list-view of WP (title and date) to make them sortable
+ * several fixes of docs
+
 ## [0.9.5](https://github.com/Vierbeuter/wp-plugin-core/tree/0.9.5) (2018-01-10)
 ### Fixed
  * minor bugfix in `WpmlWpOptions->getByPageClass(…)` method which used the active language (as determined by WPML) instead of the one passed to it

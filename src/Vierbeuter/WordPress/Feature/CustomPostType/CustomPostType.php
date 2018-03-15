@@ -60,8 +60,11 @@ abstract class CustomPostType extends Component
 
         //  let all fields register their WP-hook implementations
         foreach ($this->getFieldGroups() as $fieldGroup) {
-            foreach ($fieldGroup->getFields() as $field)
-            $field->initWpHooks();
+            $fieldGroup->setPostType($this);
+
+            foreach ($fieldGroup->getFields() as $field) {
+                $field->initWpHooks();
+            }
         }
     }
 
@@ -284,11 +287,20 @@ abstract class CustomPostType extends Component
     /**
      * Returns a list of columns that have to be sortable in admin panel.
      *
+     * When overriding this method to add new entries to the list of sortable columns while those new columns rely on
+     * values of custom-fields then don't forget to override the <code>preGetPosts()</code> method as well to alter the
+     * query used for selecting the posts.
+     *
+     * @param array $columns
+     *
      * @return array
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::preGetPosts()
+     * @see https://www.ractoon.com/2016/11/wordpress-custom-sortable-admin-columns-for-custom-posts/
      */
-    public function getSortableColumns(): array
+    public function getSortableColumns(array $columns): array
     {
-        return [];
+        return $columns;
     }
 
     /**
@@ -461,5 +473,43 @@ abstract class CustomPostType extends Component
     public function updateTitleAndSlugOnSave(): bool
     {
         return true;
+    }
+
+    /**
+     * Manipulates the given WP query to the post-type's needs.
+     *
+     * @param \WP_Query $query
+     */
+    public function preGetPosts(\WP_Query $query): void
+    {
+        //  method may be overridden
+    }
+
+    /**
+     * Determines if the post-type supports revisions.
+     *
+     * To make a post-type supporting revisions add the following entry to the options array returned by the
+     * `getPostTypeOptions()` method:
+     *
+     * <code>
+     * protected function getPostTypeOptions(): array
+     * {
+     *  return [
+     *      //  any other options here, e.g.
+     *      'menu_icon' => 'dashicons-media-document',
+     *      //  …
+     *      //  add this one
+     *      'supports' => ['revisions'],
+     *  ];
+     * }
+     * </code>
+     *
+     * @return bool
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getPostTypeOptions()
+     */
+    public function supportsRevisions(): bool
+    {
+        return !empty($this->options['supports']) && in_array('revisions', $this->options['supports']);
     }
 }

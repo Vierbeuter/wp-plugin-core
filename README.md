@@ -8,6 +8,26 @@ The library is pretty close to release 1.0 though. See the project's [roadmap](.
 
 The **WP Plugin Core** library provides base classes for developing WordPress plugins. It enables you to easily build your stuff in an object-oriented way.
 
+## What's in it?
+
+A lot, I would say… Let's start with a few buzz words:
+
+* object orientation
+* dependency injection
+* easy WP hooks
+* custom post-types
+* custom fields
+* custom taxonomies
+* translations / i18n
+* custom pages for wp-admin panel
+* config pages for `wp_options` (also translatable)
+* REST API endpoints
+* WPML support
+
+… to only name some of the major features and characteristics of **WP Plugin Core**.
+
+See the [change logs](./CHANGELOG.md) for details of what you can expect by using the latest release, for example.
+
 ## Can I use it?
 
 This library is supposed to be used with [Composer](https://getcomposer.org/). You can integrate it in your standard WordPress installation though (by copying the sources to your own WP plugin and manually configuring an autoloader etc.). But for ease of use it's recommended to use Composer.
