@@ -60,6 +60,8 @@ abstract class CustomPostType extends Component
 
         //  let all fields register their WP-hook implementations
         foreach ($this->getFieldGroups() as $fieldGroup) {
+            $fieldGroup->setPostType($this);
+
             foreach ($fieldGroup->getFields() as $field) {
                 $field->initWpHooks();
             }
@@ -481,5 +483,33 @@ abstract class CustomPostType extends Component
     public function preGetPosts(\WP_Query $query): void
     {
         //  method may be overridden
+    }
+
+    /**
+     * Determines if the post-type supports revisions.
+     *
+     * To make a post-type supporting revisions add the following entry to the options array returned by the
+     * `getPostTypeOptions()` method:
+     *
+     * <code>
+     * protected function getPostTypeOptions(): array
+     * {
+     *  return [
+     *      //  any other options here, e.g.
+     *      'menu_icon' => 'dashicons-media-document',
+     *      //  …
+     *      //  add this one
+     *      'supports' => ['revisions'],
+     *  ];
+     * }
+     * </code>
+     *
+     * @return bool
+     *
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::getPostTypeOptions()
+     */
+    public function supportsRevisions(): bool
+    {
+        return !empty($this->options['supports']) && in_array('revisions', $this->options['supports']);
     }
 }
