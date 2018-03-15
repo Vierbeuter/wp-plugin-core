@@ -123,7 +123,7 @@ abstract class AddCustomPostTypes extends Feature
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::save_post() */
             'save_post',
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::manage_posts_custom_column() */
-            'manage_posts_custom_column',        //  for non hierarchical post-types
+            'manage_posts_custom_column',        //  for non-hierarchical post-types
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::manage_pages_custom_column() */
             'manage_pages_custom_column' => [    //  for hierarchical/nestable post-types
                 'args' => 2,
@@ -477,7 +477,6 @@ abstract class AddCustomPostTypes extends Feature
                         $fieldGroup->setPostType($postType);
 
                         //  get first field (unless field list is empty)
-                        //  erstes Feld holen (sofern vorhanden)
                         $fields = $fieldGroup->getFields();
                         $firstField = reset($fields);
 
