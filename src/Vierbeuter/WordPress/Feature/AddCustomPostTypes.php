@@ -130,6 +130,11 @@ abstract class AddCustomPostTypes extends Feature
             ],
             /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::admin_head() */
             'admin_head',
+            /** @see \Vierbeuter\WordPress\Feature\AddCustomPostTypes::filterRevisionFields() */
+            '_wp_post_revision_fields' => [
+                'method' => 'filterRevisionFields',
+                'args' => 2,
+            ],
         ];
     }
 
@@ -193,8 +198,10 @@ abstract class AddCustomPostTypes extends Feature
 
             //  iterate the field-groups
             foreach ($fieldGroups as $fieldGroup) {
+                $fieldGroup->setPostType($postType);
+
                 //  register field-group to current post-type to render its form-fields
-                $fieldGroup->register($postType);
+                $fieldGroup->register();
             }
         }
     }
@@ -215,6 +222,8 @@ abstract class AddCustomPostTypes extends Feature
         if (!empty($postType)) {
             //  iterate the post-type's field-groups
             foreach ($postType->getFieldGroups() as $fieldGroup) {
+                $fieldGroup->setPostType($postType);
+
                 //  save form data for each custom-field of current field-group
                 $fieldGroup->save($postType->getSlug(), $postId);
             }
@@ -465,6 +474,8 @@ abstract class AddCustomPostTypes extends Feature
 
                     //  iterate all field-groups (in case of first group has no custom-fields)
                     foreach ($postType->getFieldGroups() as $fieldGroup) {
+                        $fieldGroup->setPostType($postType);
+
                         //  get first field (unless field list is empty)
                         //  erstes Feld holen (sofern vorhanden)
                         $fields = $fieldGroup->getFields();
@@ -493,5 +504,39 @@ abstract class AddCustomPostTypes extends Feature
         }
 
         return $data;
+    }
+
+    /**
+     * Adds custom fields to the list of fields which have to be saved using revisions. Depends on the post-types'
+     * revision support.
+     *
+     * @param array $fields list of fields to revision, contains 'post_title', 'post_content', and 'post_excerpt' by
+     *     default.
+     * @param array $post a post array being processed for insertion as a post revision
+     *
+     * @return array the filtered list including all added custom-fields
+     *
+     * @see https://developer.wordpress.org/reference/hooks/_wp_post_revision_fields/
+     * @see \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType::supportsRevisions()
+     */
+    public function filterRevisionFields(array $fields, array $post)
+    {
+        //  iterate all post-types to add their fields to $fields array
+        foreach ($this->getPostTypes() as $postType) {
+
+            //  only those fields are of interest whose overlying post-types support revisions
+            if ($postType->supportsRevisions()) {
+
+                foreach ($postType->getFieldGroups() as $fieldGroup) {
+                    $fieldGroup->setPostType($postType);
+
+                    foreach ($fieldGroup->getFields() as $field) {
+                        $fields[$fieldGroup->getFieldDbMetaKey($field)] = $field->getSlug();
+                    }
+                }
+            }
+        }
+
+        return $fields;
     }
 }

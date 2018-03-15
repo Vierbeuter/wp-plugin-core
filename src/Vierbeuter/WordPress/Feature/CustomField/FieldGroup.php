@@ -15,6 +15,11 @@ class FieldGroup
 {
 
     /**
+     * @var CustomPostType
+     */
+    protected $postType;
+
+    /**
      * @var string
      */
     protected $slug;
@@ -76,6 +81,26 @@ class FieldGroup
         $this->context = $context;
         $this->nonceAction = md5($slug);
         $this->description = $description;
+    }
+
+    /**
+     * Returns the overlying post-type.
+     *
+     * @return \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType
+     */
+    public function getPostType(): CustomPostType
+    {
+        return $this->postType;
+    }
+
+    /**
+     * Sets the overlying post-type.
+     *
+     * @param \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType $postType
+     */
+    public function setPostType(CustomPostType $postType)
+    {
+        $this->postType = $postType;
     }
 
     /**
@@ -173,18 +198,16 @@ class FieldGroup
     }
 
     /**
-     * Registers this field-group to the given post-type. The group will be added as meta-box.
+     * Registers this field-group to the currently set post-type. The group will be added as meta-box.
      *
      * To define the callable for rendering the meta-box the render() method of FieldGroup class will be used.
-     *
-     * @param CustomPostType $postType
      *
      * @see add_meta_box()
      * @see \Vierbeuter\WordPress\Feature\CustomField\FieldGroup::render()
      */
-    public function register(CustomPostType $postType): void
+    public function register(): void
     {
-        add_meta_box($this->getSlug(), $this->getLabel(), [$this, 'render'], $postType->getSlug(),
+        add_meta_box($this->getSlug(), $this->getLabel(), [$this, 'render'], $this->postType->getSlug(),
             $this->getContext(), $this->getPriority(), $this->getFields());
     }
 
@@ -291,8 +314,21 @@ class FieldGroup
                 $data = sanitize_text_field($data);
             }
 
+            //  check if revisions are supported for current post-type
+            $revisionSupport = $this->postType->supportsRevisions();
+            $isRevision = boolval(wp_is_post_revision($postId));
+            $isAutosave = boolval(wp_is_post_autosave($postId));
+
             //  update the meta field in the database
-            update_post_meta($postId, $dbMetaKey, $data);
+            if (($revisionSupport && $isRevision) || $isAutosave) {
+                //  in case of we have a post revision then update the field data a little bit more low-level like with
+                //  the underlying update_metadata(…) function because WP's update_post_meta(…) function always
+                //  fallbacks to the parent post ID instead of using the current $postId which also updates published
+                //  data even in case of just checking a post's preview
+                update_metadata('post', $postId, $dbMetaKey, $data);
+            } else {
+                update_post_meta($postId, $dbMetaKey, $data);
+            }
         }
     }
 
@@ -330,15 +366,14 @@ class FieldGroup
      *
      * The returned database key is more or less the "fully qualified" slug of the custom-field.
      *
-     * @param \Vierbeuter\WordPress\Feature\CustomPostType\CustomPostType $post_type
      * @param CustomField $field
      *
      * @return string
      */
-    public function getFieldDbMetaKey(CustomPostType $post_type, CustomField $field): string
+    public function getFieldDbMetaKey(CustomField $field): string
     {
         $field_id = $this->getFieldId($field);
-        $db_meta_key = $this->getDbMetaKey($post_type->getSlug(), $field_id);
+        $db_meta_key = $this->getDbMetaKey($this->postType->getSlug(), $field_id);
 
         return $db_meta_key;
     }
