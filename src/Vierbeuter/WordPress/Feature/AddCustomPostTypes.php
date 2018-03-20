@@ -309,6 +309,11 @@ abstract class AddCustomPostTypes extends Feature
      */
     public function pre_get_posts(\WP_Query $query): void
     {
+        //  don't alter the query if no post-type requested
+        if (empty($query->query['post_type'])) {
+            return;
+        }
+
         //  determine post-type
         $postType = $this->getPostType($query->query['post_type']);
 
@@ -530,7 +535,9 @@ abstract class AddCustomPostTypes extends Feature
                     $fieldGroup->setPostType($postType);
 
                     foreach ($fieldGroup->getFields() as $field) {
-                        $fields[$fieldGroup->getFieldDbMetaKey($field)] = $field->getSlug();
+                        $fieldKey = $fieldGroup->getFieldDbMetaKey($field);
+                        $fieldLabel = $fieldGroup->getLabel() . ' > ' . $field->getLabel();
+                        $fields[$fieldKey] = $fieldLabel;
                     }
                 }
             }
