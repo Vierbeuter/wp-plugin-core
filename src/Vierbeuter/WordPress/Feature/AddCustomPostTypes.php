@@ -530,7 +530,9 @@ abstract class AddCustomPostTypes extends Feature
                     $fieldGroup->setPostType($postType);
 
                     foreach ($fieldGroup->getFields() as $field) {
-                        $fields[$fieldGroup->getFieldDbMetaKey($field)] = $field->getSlug();
+                        $fieldKey = $fieldGroup->getFieldDbMetaKey($field);
+                        $fieldLabel = $fieldGroup->getLabel() . ' > ' . $field->getLabel();
+                        $fields[$fieldKey] = $fieldLabel;
                     }
                 }
             }
