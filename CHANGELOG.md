@@ -1,6 +1,13 @@
 # Change Log
 
 
+## [0.10.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.1) (2018-03-20)
+
+### Fixed
+ * fixed a potential PHP notice caused by accessing an "Undefined index"
+ * for post-types supporting revisions the field slugs have been used on the revision comparison page, now their actual labels will be used
+
+
 ## [0.10.0](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.0) (2018-03-15)
 
 ### Added
