@@ -1,6 +1,12 @@
 # Change Log
 
 
+## [0.10.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.2) (2018-03-27)
+
+### Fixed
+ * fixed implementaion of `pre_get_posts` filter because passed query may contain a list of post-types instead of a single post-type's slug
+
+
 ## [0.10.1](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.1) (2018-03-20)
 
 ### Fixed
