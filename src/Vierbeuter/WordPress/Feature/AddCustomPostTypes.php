@@ -314,19 +314,23 @@ abstract class AddCustomPostTypes extends Feature
             return;
         }
 
-        //  determine post-type
-        $postType = $this->getPostType($query->query['post_type']);
+        //  determine post-types
+        $postTypeSlugs = is_array($query->query['post_type']) ? $query->query['post_type'] : [$query->query['post_type']];
 
-        //  if no post-type found then let the given query untouched
-        if (empty($postType)) {
-            return;
+        foreach ($postTypeSlugs as $postTypeSlug) {
+            $postType = $this->getPostType($postTypeSlug);
+
+            //  if no post-type found then let the given query untouched
+            if (empty($postType)) {
+                continue;
+            }
+
+            //  extend fulltext-search in admin-panel
+            $this->extendFulltextSearchForAdminPanel($query, $postType);
+
+            //  let the post-type manipulate the query on its own
+            $postType->preGetPosts($query);
         }
-
-        //  extend fulltext-search in admin-panel
-        $this->extendFulltextSearchForAdminPanel($query, $postType);
-
-        //  let the post-type manipulate the query on its own
-        $postType->preGetPosts($query);
     }
 
     /**
