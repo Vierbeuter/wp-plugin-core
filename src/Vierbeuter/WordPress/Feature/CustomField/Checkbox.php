@@ -33,11 +33,11 @@ class Checkbox extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      */
-    function renderField($postOrTerm = null, string $fieldId, string $value = null): void
+    function renderField(string $fieldId, string $value = null, $postOrTerm = null): void
     {
         $checked = $value == 'true' ? 'checked="checked"' : '';
 

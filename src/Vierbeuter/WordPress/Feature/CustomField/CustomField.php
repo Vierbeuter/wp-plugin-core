@@ -162,7 +162,7 @@ abstract class CustomField
         //  input area ("right side")
         echo '<td>';
         //  the actual input field
-        $this->renderField($post, $fieldId, $value);
+        $this->renderField($fieldId, $value, $post);
         //  optional description/usage hint
         /**
          * styling with CSS class "custom-field-note"
@@ -171,7 +171,7 @@ abstract class CustomField
          */
         $this->renderDescription($fieldId, 'custom-field-note clear');
         //  other… e.g. Javascript
-        $this->renderAnythingAfterField($post, $fieldId, $value);
+        $this->renderAnythingAfterField($fieldId, $value, $post);
         echo '</td>';
     }
 
@@ -188,11 +188,11 @@ abstract class CustomField
         $this->renderLabel($fieldId);
 
         //  the actual input field
-        $this->renderField(null, $fieldId);
+        $this->renderField($fieldId);
         //  optional description/usage hint
         $this->renderDescription($fieldId);
         //  other… e.g. Javascript
-        $this->renderAnythingAfterField(null, $fieldId);
+        $this->renderAnythingAfterField($fieldId);
 
         echo '</div>';
     }
@@ -218,11 +218,11 @@ abstract class CustomField
         //  input area ("right side")
         echo '<td>';
         //  the actual input field
-        $this->renderField($term, $fieldId, $value);
+        $this->renderField($fieldId, $value, $term);
         //  optional description/usage hint
         $this->renderDescription($fieldId, 'description');
         //  other… e.g. Javascript
-        $this->renderAnythingAfterField($term, $fieldId, $value);
+        $this->renderAnythingAfterField($fieldId, $value, $term);
         echo '</td>';
 
         //  wrapper end
@@ -251,7 +251,7 @@ abstract class CustomField
         //  input area ("right side")
         echo '<td>';
         //  the actual input field
-        $this->renderField(null, $fieldId, $value);
+        $this->renderField($fieldId, $value);
         //  optional description/usage hint
         /**
          * styling with CSS class "custom-field-note"
@@ -260,7 +260,7 @@ abstract class CustomField
          */
         $this->renderDescription($fieldId, 'custom-field-note clear');
         //  other… e.g. Javascript
-        $this->renderAnythingAfterField(null, $fieldId, $value);
+        $this->renderAnythingAfterField($fieldId, $value);
         echo '</td>';
 
         //  wrapper end
@@ -290,7 +290,7 @@ abstract class CustomField
         //  input area ("right side")
         echo '<td>';
         //  the actual input field
-        $this->renderField(null, $fieldId, $value);
+        $this->renderField($fieldId, $value);
         //  optional description/usage hint
         /**
          * styling with CSS class "custom-field-note"
@@ -299,7 +299,7 @@ abstract class CustomField
          */
         $this->renderDescription($fieldId, 'custom-field-note clear');
         //  other… e.g. Javascript
-        $this->renderAnythingAfterField(null, $fieldId, $value);
+        $this->renderAnythingAfterField($fieldId, $value);
         echo '</td>';
 
         //  wrapper end
@@ -322,11 +322,11 @@ abstract class CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      */
-    abstract protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void;
+    abstract protected function renderField(string $fieldId, string $value = null, $postOrTerm = null): void;
 
     /**
      * Renders the description's markup.
@@ -344,11 +344,11 @@ abstract class CustomField
     /**
      * Renders additional markup after the input to add Javascript snippets for instance or any other stuff like that.
      *
-     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      */
-    protected function renderAnythingAfterField($postOrTerm = null, string $fieldId, string $value = null): void
+    protected function renderAnythingAfterField(string $fieldId, string $value = null, $postOrTerm = null): void
     {
         //  may be overridden
     }

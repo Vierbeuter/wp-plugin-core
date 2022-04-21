@@ -26,11 +26,11 @@ class ReadOnlyField extends CustomField
     /**
      * Renders the input's markup.
      *
-     * @param \WP_Post|\WP_Term|null $postOrTerm
      * @param string $fieldId
      * @param string|null $value
+     * @param \WP_Post|\WP_Term|null $postOrTerm
      */
-    protected function renderField($postOrTerm = null, string $fieldId, string $value = null): void
+    protected function renderField(string $fieldId, string $value = null, $postOrTerm = null): void
     {
         echo '<span class="custom-field-note">– nicht editierbar –</span>';
         echo '<input type="hidden" name="' . $fieldId . '" value="' . htmlentities($value) . '" />';
