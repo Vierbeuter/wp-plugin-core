@@ -1,6 +1,13 @@
 # Change Log
 
 
+## [Unreleased]
+
+### Changed
+ * renamed `ReadOnly` class to `ReadOnlyField`, because `readonly` is reserved since PHP 8.1
+ * change parameter signatures of a few methods, because optional method parameters before required ones are depreacted since PHP 8.0
+
+
 ## [0.10.2](https://github.com/Vierbeuter/wp-plugin-core/tree/0.10.2) (2018-03-27)
 
 ### Fixed
