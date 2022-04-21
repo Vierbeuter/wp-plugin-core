@@ -7,7 +7,7 @@ namespace Vierbeuter\WordPress\Feature\CustomField;
  *
  * @package Vierbeuter\WordPress\Feature\CustomField
  */
-class ReadOnly extends CustomField
+class ReadOnlyField extends CustomField
 {
 
     /**
